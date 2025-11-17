@@ -4,7 +4,7 @@ import CommandePaiement from "./commandePaiement.js";
 
 const Paiement = sequelize.define('Paiement', {
     method: {
-        type: DataTypes.STRING,
+        type: DataTypes.ENUM('CB', 'Espèces', 'TR'),
         allowNull: false
     }
 });
