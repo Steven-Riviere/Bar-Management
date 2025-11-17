@@ -10,7 +10,11 @@ const BarBiere = sequelize.define('BarBiere', {
     },
     stock: {
         type: DataTypes.INTEGER,
-        defaultValue: 0
+        allowNull: false,
+        defaultValue: 0,
+        validate: {
+            min: 0
+        }
     }
 },
 {timestamps: false});
