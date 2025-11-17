@@ -1,6 +1,7 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../config/database.js";
 import CommandePaiement from "./commandePaiement.js";
+import BiereCommande from "./biereCommande.js";
 
 const Commande = sequelize.define('Commande',{
     name: {
@@ -28,5 +29,6 @@ const Commande = sequelize.define('Commande',{
     }
 });
 Commande.belongsToMany(Paiement, { through: CommandePaiement });
+Commande.belongsToMany(Biere, { through: BiereCommande });
 
 export default Commande;
