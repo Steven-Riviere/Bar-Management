@@ -1,6 +1,7 @@
 import {DataTypes} from "sequelize";
 import sequelize from "../config/database.js";
 import Biere from "./biere.js";
+import BarBiere from "./barBiere.js";
 
 const Bar = sequelize.define('Bar',{
     name: {
@@ -22,6 +23,6 @@ const Bar = sequelize.define('Bar',{
         allowNull:false
     },
 });
-Bar.belongsToMany(Biere, { through: 'BarBieres' });
+Bar.belongsToMany(Biere, { through: BarBiere });
 
 export default Bar;
