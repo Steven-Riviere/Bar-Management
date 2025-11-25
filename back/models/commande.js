@@ -1,26 +1,14 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../config/database.js";
-import CommandePaiement from "./commandePaiement.js";
-import BiereCommande from "./biereCommande.js";
 
 const Commande = sequelize.define('Commande',{
-    name: {
-        type: DataTypes.STRING,
-    },
-
-    price: {
-        type: DataTypes.FLOAT,
-    },
-
-    bar_id: {
-        type: DataTypes.INTEGER,
-    },
-
+    price: DataTypes.FLOAT,
+    bar_id: DataTypes.INTEGER,
+    table_id : DataTypes.INTEGER,
     date: {
         type: DataTypes.DATEONLY, // Utilisation de DATEONLY pour stocker uniquement la date sans l'heure
         allowNull: false,
     },
-
     status: {
         type: DataTypes.ENUM,
         values: ['en cours', 'fini'],
@@ -28,7 +16,5 @@ const Commande = sequelize.define('Commande',{
         defaultValue: 'en cours',
     }
 });
-Commande.belongsToMany(Paiement, { through: CommandePaiement });
-Commande.belongsToMany(Biere, { through: BiereCommande });
 
 export default Commande;

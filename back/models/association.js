@@ -1,0 +1,40 @@
+import Biere from "./biere.js";
+import Bar from "./bar.js";
+import BarBiere from "./barBiere.js";
+import BiereCommande from "./biereCommande.js";
+import Commande from "./commande.js";
+import Paiement from "./paiement.js";
+import CommandePaiement from "./commandePaiement.js";
+import Table from "./table.js";
+
+// --- Associations --- //
+// Bar <-> Biere
+Bar.belongsToMany(Biere, { through: BarBiere });
+Biere.belongsToMany(Bar, { through: BarBiere });
+
+// Commande <-> Biere
+Commande.belongsToMany(Biere, { through: BiereCommande });
+Biere.belongsToMany(Commande, { through: BiereCommande });
+
+// Commande <-> Paiement
+Commande.belongsToMany(Paiement, { through: CommandePaiement });
+Paiement.belongsToMany(Commande, { through: CommandePaiement });
+
+// Table <-> Commande
+Table.hasMany(Commande, { foreignKey: "table_id" });
+Commande.belongsTo(Table, { foreignKey: "table_id" });
+
+// Table <-> Bar
+Bar.hasMany(Table, { foreignKey: "bar_id" });
+Table.belongsTo(Bar, { foreignKey: "bar_id" });
+
+export {
+    Biere,
+    Bar,
+    BarBiere,
+    BiereCommande,
+    Commande,
+    Paiement,
+    CommandePaiement,
+    Table
+};
