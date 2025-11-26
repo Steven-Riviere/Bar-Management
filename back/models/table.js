@@ -6,7 +6,7 @@ const Table = sequelize.define('Table',{
         type: DataTypes.INTEGER,
         unique:true,
     },
-        bar_id: {
+    bar_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
     }

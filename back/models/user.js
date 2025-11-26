@@ -23,9 +23,13 @@ const User = sequelize.define('User',{
         defaultValue: "SERVEUR",
     },
     bar_id: {
-    type: DataTypes.INTEGER,
-    allowNull: true
-}
+        type: DataTypes.INTEGER,
+        allowNull: true
+    },
+    active: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: true
+    }
 
 },
 {timestamps: false});
