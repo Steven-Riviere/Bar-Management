@@ -24,7 +24,7 @@ const User = sequelize.define('User',{
     },
     bar_id: {
     type: DataTypes.INTEGER,
-    allowNull: true,
+    allowNull: true
 }
 
 },
