@@ -4,6 +4,11 @@ import sequelize from './config/database.js';
 import './models/association.js';
 import { seedDatabase } from "./config/seed/index.js";
 import dotenv from "dotenv";
+import auth from "./routes/login.js";
+import register from "./routes/signup.js"
+
+//env
+dotenv.config();
 
 const app = express();
 const port = 3000;
@@ -17,10 +22,9 @@ app.use(cors({
 app.use(express.json());
 
 // Utilisation des routes
+app.use("/login", auth);
+app.use("/signup", register);
 //a rajouter a l'avenir
-
-//env
-dotenv.config();
 
 sequelize
   .sync()
@@ -33,6 +37,7 @@ sequelize
     console.error('Unable to connect to the database:', err);
   });
 
+//lancement du serveur
 app.listen(port, () => {
   console.log(`✅ API Server is running on port ${port}`);
 });
