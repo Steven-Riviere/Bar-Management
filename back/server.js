@@ -3,7 +3,7 @@ import express from 'express';
 import sequelize from './config/database.js';
 import './models/association.js';
 import { seedDatabase } from "./config/seed/index.js";
-
+import dotenv from "dotenv";
 
 const app = express();
 const port = 3000;
@@ -18,6 +18,9 @@ app.use(express.json());
 
 // Utilisation des routes
 //a rajouter a l'avenir
+
+//env
+dotenv.config();
 
 sequelize
   .sync()
