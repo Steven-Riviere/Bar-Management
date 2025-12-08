@@ -8,6 +8,7 @@ import auth from "./routes/login.js";
 import register from "./routes/signup.js";
 import barsRoutes from './routes/bars.js';
 import bieresRoutes from './routes/bieres.js';
+import stocksRoutes from './routes/stocks.js';
 
 
 //env
@@ -29,6 +30,7 @@ app.use("/login", auth);
 app.use("/signup", register);
 app.use('/bars', barsRoutes);
 app.use('/bieres', bieresRoutes);
+app.use('/', stocksRoutes);
 
 sequelize
   .sync()

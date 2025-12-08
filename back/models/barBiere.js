@@ -2,7 +2,7 @@ import { DataTypes } from "sequelize";
 import sequelize from "../config/database.js";
 
 const BarBiere = sequelize.define('BarBiere', {
-    prix: {
+    price: {
         type: DataTypes.FLOAT,
         allowNull: false,
         defaultValue: 0,
