@@ -30,7 +30,7 @@ app.use("/login", auth);
 app.use("/signup", register);
 app.use('/bars', barsRoutes);
 app.use('/bieres', bieresRoutes);
-app.use('/', stocksRoutes);
+app.use('/stocks', stocksRoutes);
 
 sequelize
   .sync()

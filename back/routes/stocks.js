@@ -8,7 +8,7 @@ import authorization from "../middlewares/authorize";
 const router = express.Router();
 
 //Récupérer toutes les bieres d'un bar avec prix et stock
-router.get('/bars/:bar_id/stocks', authenticate, async(req, res) => {
+router.get('/bars/:bar_id', authenticate, async(req, res) => {
     try {
         const bar = await Bar.findByPk(req.params.bar_id, {
             include: {
@@ -27,7 +27,7 @@ router.get('/bars/:bar_id/stocks', authenticate, async(req, res) => {
 });
 
 // Récupérer stock d'une biere precise avec un bar précis
-router.get("/bars/:bar_id/stocks/:biere_id", authenticate, async (req, res) => {
+router.get("/bars/:bar_id/:biere_id", authenticate, async (req, res) => {
     try {
         const link = await BarBiere.findOne({
             where: {
@@ -47,7 +47,7 @@ router.get("/bars/:bar_id/stocks/:biere_id", authenticate, async (req, res) => {
 });
 
 //Ajouter une biere au bar mais avec un prix et stock
-router.post('/bars/:bar_id/stocks', authenticate, authorization("ADMIN", "GERANT", "BARMAN"), async(req,res) => {
+router.post('/bars/:bar_id', authenticate, authorization("ADMIN", "GERANT", "BARMAN"), async(req,res) => {
     try {
         const { biere_id, prix, stock } = req.body;
 
@@ -70,7 +70,7 @@ router.post('/bars/:bar_id/stocks', authenticate, authorization("ADMIN", "GERANT
 
 
 //Mettre a jour le stock ou le prix d'une biere dans le bar
-router.put("/bars/:bar_id/stocks/:biere_id", authenticate, authorization("ADMIN", "GERANT", "BARMAN"), async (req, res) => {
+router.put("/bars/:bar_id/:biere_id", authenticate, authorization("ADMIN", "GERANT", "BARMAN"), async (req, res) => {
     try {
         const link = await BarBiere.findOne({
             where: {
@@ -91,7 +91,7 @@ router.put("/bars/:bar_id/stocks/:biere_id", authenticate, authorization("ADMIN"
 });
 
 //Retirer complétement une biere du bar (avec prix et stocks)
-router.delete("/bars/:bar_id/stocks/:biere_id", authenticate, authorization("ADMIN", "GERANT", "BARMAN"), async(req,res) => {
+router.delete("/bars/:bar_id/:biere_id", authenticate, authorization("ADMIN", "GERANT", "BARMAN"), async(req,res) => {
     try {
         const link = await BarBiere.findOne({
             where: {

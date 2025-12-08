@@ -9,7 +9,7 @@ function validatePassword(password) {
     return regex.test(password);
 }
 
-router.post("/signup", async (req, res) => {
+router.post("/", async (req, res) => {
     const { name, email, password, role } = req.body;
 
     try {
