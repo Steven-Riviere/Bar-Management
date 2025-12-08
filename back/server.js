@@ -5,7 +5,10 @@ import './models/association.js';
 import { seedDatabase } from "./config/seed/index.js";
 import dotenv from "dotenv";
 import auth from "./routes/login.js";
-import register from "./routes/signup.js"
+import register from "./routes/signup.js";
+import barsRoutes from './routes/bars.js';
+import bieresRoutes from './routes/bieres.js';
+
 
 //env
 dotenv.config();
@@ -24,7 +27,8 @@ app.use(express.json());
 // Utilisation des routes
 app.use("/login", auth);
 app.use("/signup", register);
-//a rajouter a l'avenir
+app.use('/bars', barsRoutes);
+app.use('/bieres', bieresRoutes);
 
 sequelize
   .sync()
