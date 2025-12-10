@@ -23,7 +23,7 @@ router.get('/:id', authenticate, async (req, res) => {
         if (bar) {
             res.json(bar);
         } else {
-            res.status(404).json({ error: 'Bar not found' });
+            res.status(404).json({ error: 'Bar non trouvé' });
         }
     } catch (err) {
         res.status(500).json({ error: err.message });
@@ -48,7 +48,7 @@ router.put('/:id', authenticate, authorization('ADMIN', 'GERANT'), async (req, r
             await bar.update(req.body);
             res.json(bar);
         } else {
-            res.status(404).json({ error: 'Bar not found' });
+            res.status(404).json({ error: 'Bar non trouvé' });
         }
     } catch (err) {
         res.status(500).json({ error: err.message });
@@ -63,7 +63,7 @@ router.delete('/:id', authenticate, authorization('ADMIN', 'GERANT'), async (req
             await bar.destroy();
             res.status(204).end();
         } else {
-            res.status(404).json({ error: 'Bar not found' });
+            res.status(404).json({ error: 'Bar non trouvé' });
         }
     } catch (err) {
         res.status(500).json({ error: err.message });
