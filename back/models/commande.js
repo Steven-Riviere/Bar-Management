@@ -3,7 +3,6 @@ import sequelize from "../config/database.js";
 
 const Commande = sequelize.define('Commande',{
     price: DataTypes.FLOAT,
-    bar_id: DataTypes.INTEGER,
     table_id : DataTypes.INTEGER,
     date: {
         type: DataTypes.DATEONLY, // Utilisation de DATEONLY pour stocker uniquement la date sans l'heure
