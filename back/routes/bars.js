@@ -12,9 +12,4 @@ router.post("/", authenticate, authorization("ADMIN", "GERANT"), controller.crea
 router.put("/:id", authenticate, authorization("ADMIN", "GERANT"), controller.update);
 router.delete("/:id", authenticate, authorization("ADMIN", "GERANT"), controller.remove);
 
-// Bières
-router.get("/:bar_id/bieres", controller.getBieres);
-router.post("/:bar_id/bieres", authenticate, authorization("ADMIN", "GERANT", "BARMAN"), controller.addBiere);
-router.delete("/:bar_id/bieres/:biere_id", authenticate, authorization("ADMIN", "GERANT", "BARMAN"), controller.removeBiere);
-
 export default router;
