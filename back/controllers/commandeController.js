@@ -83,6 +83,43 @@ export async function deletePaiement(req, res) {
         res.status(400).json({ error: err.message });
     }
 }
+//biere d'une commande
+export async function addBiere(req, res) {
+    try {
+        const { biere_id, quantity} = req.body;
+        const commande = await service.getCommande(req.params.id);
+        if (!commande) return res.status(404).json({ error: "Commande non trouvée" });
+
+        const updated = await service.ajouterBiere(commande, biere_id, quantity);
+        res.status(201).json(updated);
+    } catch (err) {
+        res.status(400).json({ error: err.message });
+    }
+}
+
+export async function modifyBiere(req, res) {
+    try {
+        const { quantity} = req.body;
+        const { commande_id, biere_id } = req.params;
+
+        const updated = await service.modifierBiere(commande_id, biere_id, quantity);
+        if (!updated) return res.status(404).json({ error: "Bière non associée à la commande" });
+
+        res.json({ message: "Bière mise à jour", data: updated });
+    } catch (err) {
+        res.status(400).json({ error: err.message });
+    }
+}
+
+export async function deleteBiere(req, res) {
+    try {
+        const { commande_id, biere_id } = req.params;
+        await service.supprimerBiere(commande_id, biere_id);
+        res.status(204).end();
+    } catch (err) {
+        res.status(400).json({ error: err.message });
+    }
+}
 
 // finir le paiement de la commande
 export async function cloture(req, res) {

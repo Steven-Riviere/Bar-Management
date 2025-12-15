@@ -2,12 +2,15 @@ import Paiement from "../models/paiement.js";
 import CommandePaiement from "../models/commandePaiement.js";
 import Commande from "../models/commande.js";
 import Table from "../models/table.js";
+import Biere from "../models/biere.js";
+import BiereCommande from "../models/biereCommande.js";
 
 export async function getAllCommandes() {
     return Commande.findAll({
         include: [
             { model: Table, include: ["Bar"] },
-            { model: Paiement, through: { attributes: ["amount"] } }
+            { model: Paiement, through: { attributes: ["amount"] } },
+            { model: Biere, through: { attributes: ["quantity", "unit_price"] } }
         ]
     });
 }
@@ -16,7 +19,9 @@ export async function getCommande(id) {
     return Commande.findByPk(id, {
         include: [
             { model: Table, include: ["Bar"] },
-            { model: Paiement, through: { attributes: ["amount"] } }
+            { model: Paiement, through: { attributes: ["amount"] } },
+            { model: Biere, through: { attributes: ["quantity", "unit_price"] } }
+
         ]
     });
 }
@@ -40,6 +45,7 @@ export async function removeCommande(id) {
     return true;
 }
 
+//Paiements associés à une commande
 export async function calculerSolde(commande) {
     const paiements = await commande.getPaiements({
         joinTableAttributes: ["amount"]
@@ -59,10 +65,12 @@ export async function calculerSolde(commande) {
 }
 
 export async function ajouterPaiement(commande, method, amount) {
+    if (amount <= 0) 
+        {
+            throw new Error("Montant invalide");
+        }
     let paiement = await Paiement.findOne({ where: { method } });
-    if (amount <= 0) {
-    throw new Error("Montant invalide");
-    }
+
     if (!paiement) paiement = await Paiement.create({ method });
 
     await commande.addPaiement(paiement, {
@@ -73,9 +81,7 @@ export async function ajouterPaiement(commande, method, amount) {
 }
 
 export async function modifierPaiement(commande_id, paiement_id, newAmount) {
-    const pivot = await CommandePaiement.findOne({
-        where: { commande_id, paiement_id }
-    });
+    const pivot = await CommandePaiement.findOne({ where: { commande_id, paiement_id }});
 
     if (!pivot) return null;
 
@@ -86,7 +92,34 @@ export async function modifierPaiement(commande_id, paiement_id, newAmount) {
 }
 
 export async function supprimerPaiement(commande_id, paiement_id) {
-    return CommandePaiement.destroy({
-        where: { commande_id, paiement_id }
+    return CommandePaiement.destroy({where: { commande_id, paiement_id }});
+}
+
+// Bière associée à une commande
+export async function ajouterBiere(commande, biereId, quantity) {
+    const biere = await Biere.findByPk(biereId);
+    if (!biere) throw new Error("Bière introuvable");
+    if (quantity <= 0) throw new Error("Quantité invalide");
+
+    const unit_price = biere.price;
+    await commande.addBiere(biere, { through: { quantity, unit_price } });
+
+    return Commande.findByPk(commande.id, {
+        include: [{ model: Biere, through: { attributes: ["quantity", "unit_price"] } }]
     });
+}
+
+export async function modifierBiere(commande_id, biere_id, quantity, unit_price) {
+    const ligne = await BiereCommande.findOne({ where: { commande_id, biere_id } });
+    if (!ligne) return null;
+
+    if (quantity !== undefined) ligne.quantity = quantity;
+    if (unit_price !== undefined) ligne.unit_price = unit_price;
+
+    await ligne.save();
+    return ligne;
+}
+
+export async function supprimerBiere(commande_id, biere_id) {
+    return BiereCommande.destroy({ where: { commande_id, biere_id } });
 }
