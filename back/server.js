@@ -4,8 +4,7 @@ import sequelize from './config/database.js';
 import './models/association.js';
 import { seedDatabase } from "./config/seed/index.js";
 import dotenv from "dotenv";
-import auth from "./routes/login.js";
-import register from "./routes/signup.js";
+import authRoutes from './routes/auth.js';
 import barsRoutes from './routes/bars.js';
 import bieresRoutes from './routes/bieres.js';
 import barBiereRoutes from './routes/barBiere.js';
@@ -28,8 +27,7 @@ app.use(cors({
 app.use(express.json());
 
 // Utilisation des routes
-app.use("/login", auth);
-app.use("/signup", register);
+app.use('/auth', authRoutes);
 app.use('/bars', barsRoutes);
 app.use('/bieres', bieresRoutes);
 app.use('/barBiere', barBiereRoutes);
