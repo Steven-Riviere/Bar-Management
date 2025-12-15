@@ -2,7 +2,7 @@ import * as service from "../services/barService";
 
 export async function getAll(req,res) {
     try {
-        const bar = await service.findAllBars();
+        const bar = await service.getAllBars();
         res.json(bar);
     } catch (err) {
         res.status(500).json({ error: err.message });
@@ -11,7 +11,7 @@ export async function getAll(req,res) {
 
 export async function getOne(req,res) {
     try {
-        const bar = await service.findBarByPk(req.params.id);
+        const bar = await service.getBarById(req.params.id);
         if(!bar)
             return res.status(404).json({error: "Bar non trouvé"});
         res.json(bar);

@@ -19,6 +19,7 @@ export async function updateBiere(id, data) {
     return biere;
 }
 
+
 export async function deleteBiere(id) {
     const biere = await Biere.findByPk(id);
     if(!biere) return null;
