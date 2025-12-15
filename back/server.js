@@ -11,6 +11,7 @@ import bieresRoutes from './routes/bieres.js';
 import barBiereRoutes from './routes/barBiere.js';
 import stocksRoutes from './routes/stocks.js';
 import commandesRoutes from './routes/commandes.js';
+import paiementsRoutes from './routes/paiements.js';
 
 //env
 dotenv.config();
@@ -34,6 +35,7 @@ app.use('/bieres', bieresRoutes);
 app.use('/barBiere', barBiereRoutes);
 app.use('/stocks', stocksRoutes);
 app.use('/commandes', commandesRoutes);
+app.use('/paiements', paiementsRoutes);
 
 sequelize
   .sync()
