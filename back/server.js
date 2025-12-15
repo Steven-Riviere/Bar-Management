@@ -9,9 +9,9 @@ import register from "./routes/signup.js";
 import barsRoutes from './routes/bars.js';
 import bieresRoutes from './routes/bieres.js';
 import barBiereRoutes from './routes/barBiere.js';
-import stocksRoutes from './routes/stocks.js';
 import commandesRoutes from './routes/commandes.js';
 import paiementsRoutes from './routes/paiements.js';
+import tablesRoutes from './routes/tables.js';
 
 //env
 dotenv.config();
@@ -33,9 +33,9 @@ app.use("/signup", register);
 app.use('/bars', barsRoutes);
 app.use('/bieres', bieresRoutes);
 app.use('/barBiere', barBiereRoutes);
-app.use('/stocks', stocksRoutes);
 app.use('/commandes', commandesRoutes);
 app.use('/paiements', paiementsRoutes);
+app.use('/tables', tablesRoutes);
 
 sequelize
   .sync()

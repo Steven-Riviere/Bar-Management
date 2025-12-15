@@ -53,13 +53,16 @@ export async function calculerSolde(commande) {
     return {
         total: commande.price,
         totalPaye,
-        restant: commande.price - totalPaye,
+        restant: Math.max(0, commande.price - totalPaye),
         paiements
     };
 }
 
 export async function ajouterPaiement(commande, method, amount) {
     let paiement = await Paiement.findOne({ where: { method } });
+    if (amount <= 0) {
+    throw new Error("Montant invalide");
+    }
     if (!paiement) paiement = await Paiement.create({ method });
 
     await commande.addPaiement(paiement, {
