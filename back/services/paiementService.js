@@ -1,8 +1,11 @@
 import Paiement from "../models/paiement";
 
 export async function getAllPaiements() {
-    return Paiement.findAll(id);
+    return Paiement.findAll({
+        where: { active: true }
+    });
 }
+
 
 export async function getPaiementById(id) {
     return Paiement.findByPk(id);
@@ -15,13 +18,7 @@ export async function createPaiement(data) {
 export async function updatePaiement(id, data) {
     const paiement = await Paiement.findByPk(id);
     if(!paiement) return null;
+    
     await paiement.update(data);
     return paiement;
-}
-
-export async function deletePaiement(id) {
-    const paiement = await Paiement.findByPk(id);
-    if(!paiement) return null;
-    await paiement.destroy();
-    return true;
 }
