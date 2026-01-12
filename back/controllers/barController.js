@@ -40,13 +40,19 @@ export async function update(req,res) {
     }
 }
 
-export async function remove(req,res) {
-    try {
-        const success = await service.deleteBar(req.params.id);
-        if(!success)
-            return res.status(404).json({error : 'Bar non trouvé'});
-        res.status(204).end();
-    } catch(err) {
-        res.status(500).json({error: err.message});
-    }
+export async function deactivateBar(req,res) {
+  const bar = await service.disableBar(req.params.id);
+  if(!bar) return res.status(404).json({ error: 'Bar non trouvé' });
+  res.json(bar);
+}
+
+export async function restoreBar(req, res) {
+  try {
+    const bar = await service.enableBar(req.params.id);
+    if (!bar) return res.status(404).json({ error: 'Bar non trouvé' });
+
+    res.json({ message: 'Bar réactivé', bar });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 }

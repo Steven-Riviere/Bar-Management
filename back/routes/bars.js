@@ -10,6 +10,7 @@ router.get("/", authenticate, controller.getAll);
 router.get("/:id", authenticate, controller.getOne);
 router.post("/", authenticate, authorization("ADMIN", "GERANT"), controller.create);
 router.put("/:id", authenticate, authorization("ADMIN", "GERANT"), controller.update);
-router.delete("/:id", authenticate, authorization("ADMIN", "GERANT"), controller.remove);
+router.delete("/:id", authenticate, authorization("ADMIN", "GERANT"), controller.deactivateBar);
+router.patch("/:id", authenticate, authorization("ADMIN", "GERANT"), controller.restoreBar);
 
 export default router;

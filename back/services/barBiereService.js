@@ -23,7 +23,8 @@ export async function addBiereToBar(bar_id, biere_id, data) {
         bar_id,
         biere_id,
         price: data.price,
-        stock: data.stock
+        stock: data.stock,
+        active: true,
     });
 
     return getBieresForBar(bar_id);
@@ -37,8 +38,26 @@ export async function updateBiereInBar(bar_id, biere_id, data) {
     return pivot;
 }
 
-export async function removeBiereFromBar(bar_id, biere_id) {
-    return BarBiere.destroy({
-        where: { bar_id, biere_id }
-    });
+export async function disableBiereFromBar(bar_id, biere_id, userId) {
+    const pivot = await BarBiere.findOne({where: { bar_id, biere_id }});
+    if (!pivot) return null;
+
+    pivot.active = false;
+    pivot.disabled_at = new Date();
+    pivot.disabled_by = userId;
+
+    await pivot.save();
+    return pivot;
+}
+
+export async function enableBiereForBar(bar_id, biere_id, userId) {
+    const pivot = await BarBiere.findOne({where: { bar_id, biere_id }});
+    if (!pivot) return null;
+
+    pivot.active = true;
+    pivot.disabled_at = null;
+    pivot.disabled_by = null;
+
+    await pivot.save();
+    return pivot;
 }

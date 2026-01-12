@@ -42,17 +42,28 @@ export async function update(req, res) {
     }
 }
 
-export async function remove(req, res) {
-    try {
-        const done = await service.removeBiereFromBar(
-            req.params.bar_id,
-            req.params.biere_id
-        );
+export async function deactivateBiereFromBar(req, res) {
+  const { bar_id, biere_id } = req.params;
+  try {
+    const removed = await service.disableBiereFromBar(bar_id, biere_id, req.user.id);
+    if (!removed)
+      return res.status(404).json({ error: "Lien bar/bière introuvable" });
 
-        if (!done) return res.status(404).json({ error: "Association non trouvée" });
+    res.json({ message: "Bière retirée du bar" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+}
 
-        res.status(204).end();
-    } catch (err) {
-        res.status(400).json({ error: err.message });
-    }
+export async function restoreBiereForBar(req, res) {
+  const { bar_id, biere_id } = req.params;
+  try {
+    const restored = await service.enableBiereForBar(bar_id, biere_id, req.user.id);
+    if (!restored)
+      return res.status(404).json({ error: "Lien bar/bière introuvable" });
+
+    res.json({ message: "Bière remise en vente" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 }

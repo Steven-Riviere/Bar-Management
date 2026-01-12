@@ -12,6 +12,10 @@ const Biere = sequelize.define('Biere', {
         type: DataTypes.FLOAT,
         min:(0),
     },
+    active: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: true,
+    }
 });
 
 export default Biere;

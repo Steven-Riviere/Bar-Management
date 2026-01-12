@@ -15,7 +15,14 @@ const BarBiere = sequelize.define('BarBiere', {
         validate: {
             min: 0
         }
-    }
+    },
+    active: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: true,
+    },
+    disabled_at: DataTypes.DATE,
+    disabled_by: DataTypes.INTEGER
+
 },
 {timestamps: false});
 

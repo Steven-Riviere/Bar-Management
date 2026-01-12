@@ -19,9 +19,18 @@ export async function updateBar(id, data) {
     return bar;
 }
 
-export async function deleteBar(id) {
-    const bar = await Bar.findByPk(id);
-    if(!bar) return null;
-    await bar.destroy();
-    return true;
+export async function disableBar(id) {
+  const bar = await Bar.findByPk(id);
+  if (!bar) return null;
+  bar.active = false;
+  await bar.save();
+  return bar;
+}
+
+export async function enableBar(id) {
+  const bar = await Bar.findByPk(id);
+  if (!bar) return null;
+  bar.active = true;
+  await bar.save();
+  return bar;
 }

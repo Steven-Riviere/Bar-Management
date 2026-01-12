@@ -19,10 +19,20 @@ export async function updateBiere(id, data) {
     return biere;
 }
 
+export async function disableBiere(id) {
+  const biere = await Biere.findByPk(id);
+  if (!biere) return null;
+  biere.active = false;
 
-export async function deleteBiere(id) {
-    const biere = await Biere.findByPk(id);
-    if(!biere) return null;
-    await biere.destroy();
-    return true;
+  await biere.save();
+  return biere;
+}
+
+export async function enableBiere(id) {
+  const biere = await Biere.findByPk(id);
+  if (!biere) return null;
+  biere.active = true;
+
+  await biere.save();
+  return biere;
 }

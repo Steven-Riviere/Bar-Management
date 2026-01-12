@@ -37,11 +37,26 @@ export async function update(req, res) {
     }
 }
 
-export async function remove(req, res) {
+export async function deactivate(req, res) {
     try {
-        await service.deleteTable(req.params.id);
-        res.status(204).end();
+        const table = await service.disableTable(req.params.id);
+        if(!table)
+            return res.status(404).json({error: "Table introuvable"});
+
+        res.json({message: "Table desactivée", table});
     } catch (err) {
-        res.status(400).json({ error: err.message });
+        res.status(500).json({ error: err.message });
+    }
+}
+
+export async function restore(req, res) {
+    try {
+        const table = await service.enableTable(req.params.id);
+        if(!table)
+            return res.status(404).json({error: "Table introuvable"});
+
+        res.json({message: "Table réactivée", table});
+    } catch (err) {
+        res.status(500).json({ error: err.message });
     }
 }

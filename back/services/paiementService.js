@@ -22,3 +22,21 @@ export async function updatePaiement(id, data) {
     await paiement.update(data);
     return paiement;
 }
+
+export async function disablePaiement(id) {
+  const paiement = await Paiement.findByPk(id);
+  if (!paiement) return null;
+  paiement.active = false;
+
+  await paiement.save();
+  return paiement;
+}
+
+export async function enablePaiement(id) {
+  const paiement = await Paiement.findByPk(id);
+  if (!paiement) return null;
+  paiement.active = true;
+
+  await paiement.save();
+  return paiement;
+}

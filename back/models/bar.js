@@ -15,6 +15,10 @@ const Bar = sequelize.define('Bar',{
         type: DataTypes.TEXT,
         allowNull:false
     },
+    active: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: true,
+    }
 });
 
 export default Bar;

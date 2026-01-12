@@ -9,6 +9,10 @@ const Table = sequelize.define('Table',{
     bar_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
+    },
+    active: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: true,
     }
 }, {
     indexes: [

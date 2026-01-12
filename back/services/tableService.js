@@ -27,12 +27,22 @@ export async function updateTable(id, data) {
     return table.update(data);
 }
 
-export async function deleteTable(id) {
-    const table = await Table.findByPk(id);
-    if (!table) throw new Error("Table non trouvée");
+export async function disableTable(id) {
+  const table = await Table.findByPk(id);
+  if (!table) return null;
+  table.active = false;
 
-    await table.destroy();
-    return true;
+  await table.save();
+  return table;
+}
+
+export async function enableTable(id) {
+    const table = await Table.findByPk(id);
+    if(!table) return null;
+    table.active = true;
+
+    await table.save();
+    return table;
 }
 
 export async function getTablesByBar(bar_id) {
