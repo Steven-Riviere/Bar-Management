@@ -27,7 +27,7 @@ export async function updateTable(id, data) {
     return table.update(data);
 }
 
-export async function disableTable(id) {
+export async function deactivateTable(id) {
   const table = await Table.findByPk(id);
   if (!table) return null;
   table.active = false;

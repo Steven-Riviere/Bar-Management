@@ -77,7 +77,7 @@ export async function deactivate(req, res) {
     }
 }
 
-export async function restore(req, res) {
+export async function enable(req, res) {
     try {
         const paiement = await service.enablePaiement(req.params.id);
         if (!paiement)

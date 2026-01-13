@@ -39,7 +39,7 @@ export async function update(req, res) {
 
 export async function deactivate(req, res) {
     try {
-        const table = await service.disableTable(req.params.id);
+        const table = await service.deactivateTable(req.params.id);
         if(!table)
             return res.status(404).json({error: "Table introuvable"});
 

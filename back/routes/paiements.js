@@ -11,6 +11,6 @@ router.get("/:id", authenticate, controller.getOne);
 router.post('/', authenticate, authorization('ADMIN', 'GERANT'), controller.create);
 router.put("/:id", authenticate, authorization("ADMIN", "GERANT"), controller.update);
 router.delete("/:id",authenticate, authorization("ADMIN", "GERANT"),controller.deactivate);
-router.patch("/:id",authenticate, authorization("ADMIN", "GERANT"),controller.restore);
+router.patch("/:id",authenticate, authorization("ADMIN", "GERANT"),controller.enable);
 
 export default router;
