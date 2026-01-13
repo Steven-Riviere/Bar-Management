@@ -2,13 +2,18 @@ export const ROUTE_BARS = '/bars';
 export const ROUTE_BAR_CREATE = '/bars/new';
 export const ROUTE_BAR_EDIT = '/bars/:id/edit';
 
-export const ROUTE_BIERES = '/bieres';
-export const ROUTE_BIERE_CREATE = '/bieres/new';
-export const ROUTE_BIERE_EDIT = '/bieres/:id/edit';
+export const ROUTE_BEERS = '/bieres';
+export const ROUTE_BEER_CREATE = '/bieres/new';
+export const ROUTE_BEER_EDIT = '/bieres/:id/edit';
 
-export const ROUTE_COMMANDES = '/commandes';
-export const ROUTE_COMMANDE_CREATE = '/commandes/new';
-export const ROUTE_COMMANDE_EDIT = '/commandes/:id/edit';
+export const ROUTE_ORDERS = '/commandes';
+export const ROUTE_ORDER_CREATE = '/commandes/new';
+export const ROUTE_ORDER_EDIT = '/commandes/:id/edit';
+export const ROUTE_ORDER_PAYMENTS = '/commandes/:id/paiements';
+export const ROUTE_ORDER_PAYMENT_EDIT = '/commandes/:commande_id/paiements/:paiement_id';
+export const ROUTE_ORDER_BEERS = '/commandes/:id/bieres';
+export const ROUTE_ORDER_BEER_EDIT = '/commandes/:commande_id/bieres/:biere_id';
+export const ROUTE_CLOSE_ORDER = '/commandes/:id/cloturer';
 
 export const ROUTE_PAYMENTS = '/paiements';
 export const ROUTE_PAYMENT_CREATE = '/paiements/new';

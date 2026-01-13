@@ -5,7 +5,7 @@ import Table from "../models/table.js";
 import Biere from "../models/biere.js";
 import BiereCommande from "../models/biereCommande.js";
 
-export async function getAllCommandes() {
+export async function getAllOrders() {
     return Commande.findAll({
         include: [
             { model: Table, include: ["Bar"] },
@@ -15,7 +15,7 @@ export async function getAllCommandes() {
     });
 }
 
-export async function getCommande(id) {
+export async function getOrder(id) {
     return Commande.findByPk(id, {
         include: [
             { model: Table, include: ["Bar"] },
@@ -26,100 +26,137 @@ export async function getCommande(id) {
     });
 }
 
-export async function createCommande(data) {
-    const table = await Table.findByPk(data.table_id);
-    if (!table) throw new Error("Table non trouvée");
-    return Commande.create(data);
+export async function createOrder(data) {
+        const table = await Table.findByPk(data.table_id);
+        if (!table) throw new Error("Table non trouvée");
+        return Commande.create({
+        table_id: table.id,
+        date: data.date,
+        price: 0,
+        status: "en cours"
+    });
 }
 
-export async function updateCommande(id, data) {
-    const commande = await Commande.findByPk(id);
-    if (!commande) throw new Error("Commande non trouvée");
-    return commande.update(data);
+export async function updateOrder(id, data) {
+    const order = await Commande.findByPk(id);
+    if (!order) throw new Error("Commande non trouvée");
+    return order.update(data);
 }
 
-export async function removeCommande(id) {
-    const commande = await Commande.findByPk(id);
-    if (!commande) throw new Error("Commande non trouvée");
-    await commande.destroy();
+export async function deleteOrder(id) {
+    const order = await Commande.findByPk(id);
+    if (!order) throw new Error("Commande non trouvée");
+    await order.destroy();
     return true;
 }
 
+export async function calculateOrderTotal(order) {
+    const beers = await order.getBieres({
+        joinTableAttributes: ["quantity", "unit_price"]
+    });
+    return beers.reduce(
+        (sum, b) =>
+            sum + (b.BiereCommande.quantity * b.BiereCommande.unit_price),
+        0
+    );
+}
+
 //Paiements associés à une commande
-export async function calculerSolde(commande) {
-    const paiements = await commande.getPaiements({
+export async function calculateBalance(order) {
+    const payments = await order.getPayments({
         joinTableAttributes: ["amount"]
     });
 
-    const totalPaye = paiements.reduce(
+    const totalPaye = payments.reduce(
         (sum, p) => sum + p.CommandePaiement.amount,
         0
     );
 
     return {
-        total: commande.price,
+        total: order.price,
         totalPaye,
-        restant: Math.max(0, commande.price - totalPaye),
-        paiements
+        restant: Math.max(0, order.price - totalPaye),
+        payments
     };
 }
 
-export async function ajouterPaiement(commande, method, amount) {
-    if (amount <= 0) 
-        {
-            throw new Error("Montant invalide");
-        }
-    let paiement = await Paiement.findOne({ where: { method } });
+export async function addPayment(order, method, amount) {
+    if (amount <= 0) throw new Error("Montant invalide");
 
-    if (!paiement) paiement = await Paiement.create({ method });
+    let payment = await Paiement.findOne({ where: { method } });
+    if (!payment) payment = await Paiement.create({ method });
 
-    await commande.addPaiement(paiement, {
+    await order.addPayment(payment, {
         through: { amount }
     });
 
-    return await calculerSolde(commande);
+    return calculateBalance(order);
 }
 
-export async function modifierPaiement(commande_id, paiement_id, newAmount) {
-    const pivot = await CommandePaiement.findOne({ where: { commande_id, paiement_id }});
+export async function updatePayment(commande_id, paiement_id, amount) {
+    if (amount <= 0) throw new Error("Montant invalide");
+
+    const pivot = await CommandePaiement.findOne({
+        where: { commande_id, paiement_id }
+    });
 
     if (!pivot) return null;
 
-    pivot.amount = newAmount;
+    pivot.amount = amount;
     await pivot.save();
 
     return pivot;
 }
 
-export async function supprimerPaiement(commande_id, paiement_id) {
+export async function deletePayment(commande_id, paiement_id) {
     return CommandePaiement.destroy({where: { commande_id, paiement_id }});
 }
 
 // Bière associée à une commande
-export async function ajouterBiere(commande, biereId, quantity) {
-    const biere = await Biere.findByPk(biereId);
-    if (!biere) throw new Error("Bière introuvable");
+export async function addBeer(order, biere_id, quantity) {
     if (quantity <= 0) throw new Error("Quantité invalide");
 
-    const unit_price = biere.price;
-    await commande.addBiere(biere, { through: { quantity, unit_price } });
+    const beer = await Biere.findByPk(biere_id);
+    if (!beer) throw new Error("Bière introuvable");
 
-    return Commande.findByPk(commande.id, {
-        include: [{ model: Biere, through: { attributes: ["quantity", "unit_price"] } }]
+    await order.addBeer(beer, {
+        through: {
+            quantity,
+            unit_price: beer.price
+        }
     });
+
+    const total = await calculateOrderTotal(order);
+    await order.update({ price: total });
+
+    return order;
 }
 
-export async function modifierBiere(commande_id, biere_id, quantity, unit_price) {
-    const ligne = await BiereCommande.findOne({ where: { commande_id, biere_id } });
-    if (!ligne) return null;
+export async function updateBeer(commande_id, biere_id, quantity, unit_price) {
+    const line = await BiereCommande.findOne({ where: { commande_id, biere_id } });
+    if (!line) return null;
 
-    if (quantity !== undefined) ligne.quantity = quantity;
-    if (unit_price !== undefined) ligne.unit_price = unit_price;
+    if (quantity <= 0) throw new Error("Quantité invalide");
+    if (unit_price !== undefined) line.unit_price = unit_price;
+    line.quantity = quantity;
+    
+    await line.save();
 
-    await ligne.save();
-    return ligne;
+    const order = await Commande.findByPk(commande_id);
+    const total = await calculateOrderTotal(order);
+    await order.update({ price: total });
+
+    return line;
 }
 
-export async function supprimerBiere(commande_id, biere_id) {
-    return BiereCommande.destroy({ where: { commande_id, biere_id } });
+export async function deleteBeer(commande_id, biere_id) {
+    await BiereCommande.destroy({
+        where: { commande_id, biere_id }
+    });
+
+    const order = await Commande.findByPk(commande_id);
+    const total = await calculateOrderTotal(order);
+    await order.update({ price: total });
+
+    return true;
 }
