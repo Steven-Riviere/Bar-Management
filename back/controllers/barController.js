@@ -1,4 +1,4 @@
-import * as service from "../services/barService";
+import * as service from "../services/barService.js";
 
 export async function getAll(req,res) {
     try {

@@ -1,4 +1,4 @@
-import Biere from "../models/biere";
+import Biere from "../models/biere.js";
 
 export async function getAllBeers() {
     return Biere.findAll();

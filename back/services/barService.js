@@ -1,4 +1,4 @@
-import Bar from "../models/bar";
+import Bar from "../models/bar.js";
 
 export async function getAllBars() {
     return Bar.findAll();

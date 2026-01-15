@@ -1,4 +1,4 @@
-import Paiement from "../models/paiement";
+import Paiement from "../models/paiement.js";
 
 export async function getAllPayments() {
     return Paiement.findAll({

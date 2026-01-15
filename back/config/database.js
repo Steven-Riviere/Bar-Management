@@ -1,9 +1,11 @@
 import { Sequelize } from 'sequelize';
+import path from 'path';
 
 const sequelize = new Sequelize(
   {
   dialect: 'sqlite',
-  storage: 'dbreactNode.sqlite',
+  storage: path.join(process.cwd(), 'dbreactNode.sqlite'),
+  logging: false,
 });
-sequelize.sync();
+
 export default sequelize;
