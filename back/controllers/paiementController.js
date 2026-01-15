@@ -2,8 +2,8 @@ import * as service from "../services/paiementService";
 
 export async function getAll(req,res) {
     try {
-        const paiement = await service.getAllPaiements();
-        res.json(paiement);
+        const payment = await service.getAllPayments();
+        res.json(payment);
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
@@ -11,10 +11,10 @@ export async function getAll(req,res) {
 
 export async function getOne(req,res) {
     try {
-        const paiement = await service.getPaiementById(req.params.id);
-        if(!paiement)
+        const payment = await service.getPaymentById(req.params.id);
+        if(!payment)
             return res.status(404).json({error: "paiement non trouvé"});
-        res.json(paiement);
+        res.json(payment);
     } catch(err) {
         res.status(500).json({error: err.message});
     }
@@ -29,7 +29,7 @@ export async function create(req,res) {
         //tout stocker en majuscules
         req.body.method = req.body.method.trim().toUpperCase();
 
-        const newPaiement = await service.createPaiement(req.body);
+        const newPaiement = await service.createPayment(req.body);
         res.status(201).json(newPaiement);
 
     }catch (err) {
@@ -48,11 +48,11 @@ export async function update(req,res) {
         if (req.body.method) {
             req.body.method = req.body.method.trim().toUpperCase();
         }
-        const paiement = await service.updatePaiement(req.params.id, req.body);
+        const payment = await service.updatePayment(req.params.id, req.body);
 
-        if(!paiement)
+        if(!payment)
             return res.status(404).json({error: 'paiement non trouvé'});
-        res.json(paiement);
+        res.json(payment);
 
     } catch(err) {
         if (err.name === "SequelizeUniqueConstraintError") {
@@ -67,11 +67,11 @@ export async function update(req,res) {
 
 export async function deactivate(req, res) {
     try {
-        const paiement = await service.disablePaiement(req.params.id);
-        if (!paiement)
+        const payment = await service.disablePayment(req.params.id);
+        if (!payment)
             return res.status(404).json({ error: "paiement non trouvé" });
 
-        res.json({ message: "Méthode de paiement désactivée", paiement });
+        res.json({ message: "Méthode de paiement désactivée", payment });
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
@@ -79,11 +79,11 @@ export async function deactivate(req, res) {
 
 export async function enable(req, res) {
     try {
-        const paiement = await service.enablePaiement(req.params.id);
-        if (!paiement)
+        const payment = await service.enablePayment(req.params.id);
+        if (!payment)
             return res.status(404).json({ error: "paiement non trouvé" });
 
-        res.json({ message: "Méthode de paiement réactivé", paiement });
+        res.json({ message: "Méthode de paiement réactivé", payment });
     } catch (err) {
         res.status(500).json({ error: err.message });
     }

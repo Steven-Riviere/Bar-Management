@@ -2,7 +2,7 @@ import Bar from "../models/bar.js";
 import Biere from "../models/biere.js";
 import BarBiere from "../models/barBiere.js";
 
-export async function getBieresForBar(bar_id) {
+export async function getBeersForBar(bar_id) {
     const bar = await Bar.findByPk(bar_id, {
         include: {
             model: Biere,
@@ -13,11 +13,11 @@ export async function getBieresForBar(bar_id) {
     return bar ? bar.Bieres : null;
 }
 
-export async function addBiereToBar(bar_id, biere_id, data) {
+export async function addBeerToBar(bar_id, biere_id, data) {
     const bar = await Bar.findByPk(bar_id);
-    const biere = await Biere.findByPk(biere_id);
+    const beer = await Biere.findByPk(biere_id);
 
-    if (!bar || !biere) return null;
+    if (!bar || !beer) return null;
 
     await BarBiere.create({
         bar_id,
@@ -27,10 +27,10 @@ export async function addBiereToBar(bar_id, biere_id, data) {
         active: true,
     });
 
-    return getBieresForBar(bar_id);
+    return getBeersForBar(bar_id);
 }
 
-export async function updateBiereInBar(bar_id, biere_id, data) {
+export async function updateBeerInBar(bar_id, biere_id, data) {
     const pivot = await BarBiere.findOne({ where: { bar_id, biere_id } });
     if (!pivot) return null;
 
@@ -38,7 +38,7 @@ export async function updateBiereInBar(bar_id, biere_id, data) {
     return pivot;
 }
 
-export async function disableBiereFromBar(bar_id, biere_id, userId) {
+export async function deactivateBeerFromBar(bar_id, biere_id, userId) {
     const pivot = await BarBiere.findOne({where: { bar_id, biere_id }});
     if (!pivot) return null;
 
@@ -50,7 +50,7 @@ export async function disableBiereFromBar(bar_id, biere_id, userId) {
     return pivot;
 }
 
-export async function enableBiereForBar(bar_id, biere_id, userId) {
+export async function enableBeerForBar(bar_id, biere_id, userId) {
     const pivot = await BarBiere.findOne({where: { bar_id, biere_id }});
     if (!pivot) return null;
 

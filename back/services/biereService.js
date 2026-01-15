@@ -1,38 +1,38 @@
 import Biere from "../models/biere";
 
-export async function getAllBieres() {
+export async function getAllBeers() {
     return Biere.findAll();
 }
 
-export async function getBiereById(id) {
+export async function getBeerById(id) {
     return Biere.findByPk(id);
 }
 
-export async function createBiere(data) {
+export async function createBeer(data) {
     return Biere.create(data);
 }
 
-export async function updateBiere(id, data) {
-    const biere = await Biere.findByPk(id);
-    if(!biere) return null;
-    await biere.update(data);
-    return biere;
+export async function updateBeer(id, data) {
+    const beer = await Biere.findByPk(id);
+    if(!beer) return null;
+    await beer.update(data);
+    return beer;
 }
 
-export async function disableBiere(id) {
-  const biere = await Biere.findByPk(id);
-  if (!biere) return null;
-  biere.active = false;
+export async function disableBeer(id) {
+  const beer = await Biere.findByPk(id);
+  if (!beer) return null;
+  beer.active = false;
 
-  await biere.save();
-  return biere;
+  await beer.save();
+  return beer;
 }
 
-export async function enableBiere(id) {
-  const biere = await Biere.findByPk(id);
-  if (!biere) return null;
-  biere.active = true;
+export async function enableBeer(id) {
+  const beer = await Biere.findByPk(id);
+  if (!beer) return null;
+  beer.active = true;
 
-  await biere.save();
-  return biere;
+  await beer.save();
+  return beer;
 }
