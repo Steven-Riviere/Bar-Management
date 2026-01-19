@@ -15,16 +15,9 @@ function LoginPage({ onLogin }) {
 
     try {
       const data = await apiLogin({ email, password });
-
-      // Stocke le token JWT
-      localStorage.setItem("token", data.token);
-
-      // Décode le token pour récupérer le user
-      const payload = JSON.parse(atob(data.token.split(".")[1]));
-      onLogin(payload);
-
+      onLogin(data.user); // PAS DE TOKEN
     } catch (err) {
-      setError(err?.message || "Erreur lors de la connexion");
+      setError(err.message || "Erreur de connexion");
     } finally {
       setLoading(false);
     }

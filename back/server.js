@@ -11,6 +11,7 @@ import barBiereRoutes from './routes/barBiere.js';
 import commandesRoutes from './routes/commandes.js';
 import paiementsRoutes from './routes/paiements.js';
 import tablesRoutes from './routes/tables.js';
+import cookieParser from "cookie-parser";
 
 //env
 dotenv.config();
@@ -20,11 +21,15 @@ const port = 3000;
 
 //utilisation de CORS
 app.use(cors({
-    origin: "http://localhost:5173"
+    origin: "http://localhost:5173",
+    credentials: true
 }));
 
 // Middleware pour parser les requêtes JSON
 app.use(express.json());
+
+//jeton pour cookie
+app.use(cookieParser());
 
 // Utilisation des routes
 app.use('/auth', authRoutes);
