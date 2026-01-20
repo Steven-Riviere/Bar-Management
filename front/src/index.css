@@ -47,3 +47,56 @@ strong {
 ul {
   padding: 0 0 0 50%;
 }
+
+/*=======REGISTER ======*/
+.register-card {
+  max-width: 450px;
+  margin: 50px auto;
+  padding: 22px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  text-align: left;
+}
+
+/* TITRE */
+.register-card h2 {
+  text-align: center;
+  margin-bottom: 18px;
+}
+
+/* ESPACE ENTRE CHAMPS */
+.register-card .mb-3 {
+  margin-bottom: 1.25rem;
+}
+
+/* LABEL */
+.register-card label {
+  font-weight: 600;
+}
+
+/* INPUT */
+.register-card input.form-control {
+  border: none;
+  background-color: #e9ecef;
+  border-radius: 5px;
+  padding: 10px;
+  width: 100%;
+}
+
+/* TEXTE D'AIDE */
+.register-card small.text-muted {
+  display: block;
+  margin-top: 6px;
+}
+
+/* BOUTON */
+.register-card button.btn {
+  margin-top: 18px;
+}
+
+/* RED STAR */
+.text-danger {
+  color: red;
+}

@@ -17,7 +17,7 @@ export default function useAuth() {
         return false;
       }
 
-      // pour les autres erreurs, tu peux décider quoi faire
+      // pour les autres erreurs et a évoluer si besoin
       console.error(err);
       throw err;
     }

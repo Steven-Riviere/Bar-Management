@@ -1,11 +1,12 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import NavBar from "./components/NavBar.jsx";
-import LoginPage from "./pages/LoginPage.jsx";
+import LoginPage from "./pages/auth/LoginPage.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import useAuth from "./hooks/useAuth.js";
 import './App.css';
-import { ROUTE_BARS, ROUTE_BEERS, ROUTE_ORDERS, ROUTE_PAYMENTS, ROUTE_TABLES, ROUTE_USERS, ROUTE_LOGIN } from "./constante";
+import { ROUTE_BARS, ROUTE_BEERS, ROUTE_ORDERS, ROUTE_PAYMENTS, ROUTE_TABLES, ROUTE_USERS, ROUTE_LOGIN, ROUTE_SIGNUP } from "./constante";
 import AuthWatcher from "./AuthWatcher.jsx";
+import RegisterPage from "./pages/auth/RegisterPage.jsx";
 
 function App() {
   const { user, setUser, loading, checkAuth } = useAuth();
@@ -24,6 +25,16 @@ function App() {
             path={ROUTE_LOGIN}
             element={!user ? <LoginPage onLogin={setUser} /> : <Navigate to={ROUTE_BARS} />}
           />
+
+        <Route
+          path={ROUTE_SIGNUP}
+          element={
+            !user
+              ? <RegisterPage onRegister={() => {}} />
+              : <Navigate to={ROUTE_BARS} />
+          }
+        />
+
 
           <Route
             path={ROUTE_BARS}
