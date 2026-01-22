@@ -3,60 +3,41 @@ body{
   margin: 0 auto;
   cursor: pointer;
 }
-
-/* NavBar*/
-strong {
-  font-size: xxx-large;
-  color: white;
+#root {
+    margin: 0 auto;
+    text-align: center;
 }
 
-.navbar {
-  background: rgb(71 67 67 / 80%);
+/* NavBar */
+.my-navbar {
+  background: rgba(71, 67, 67, 0.8);
 }
 
-.navbar-brand {
-  border-left: 2px solid #fff; /* Petite bordure à gauche */
+.my-navbar .navbar-brand {
+  font-size: 1.8rem;
+  color: #fff;
 }
 
-.navbar-brand,
-.navbar-nav .nav-link {
-  color: #fff; /* Couleur blanche pour le texte */
+.my-navbar .nav-link {
+  color: #fff;
 }
 
-.navbar-nav {
-  display: flex; /* Afficher les éléments de la liste horizontalement */
-  align-items: center; /* Centrer verticalement les éléments de la liste */
-  list-style-type: none;/*permet d'enlever les points du menu */
+.my-navbar .nav-link:hover {
+  color: red;
 }
 
-.navbar-nav .nav-item {
-  margin-right: 10px; /* Marge entre les éléments du menu */
-}
+/*******COMMUNS******/
 
-.navbar-nav .nav-item:last-child {
-  margin-right: 0; /* Supprimer la marge à droite pour le dernier élément */
-}
 
-.navbar-nav .nav-link {
-  padding: 10px; /* Ajouter un peu de padding pour les liens */
-}
-
-.navbar-nav .nav-link:hover {
-  color: red; /* Changement de couleur en rouge au survol */
-}
-ul {
-  padding: 0 0 0 50%;
-}
-
-/*=======REGISTER ======*/
+/*******REGISTER *******/
 .register-card {
   max-width: 450px;
   margin: 50px auto;
   padding: 22px;
   border: 1px solid #ccc;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
   border-radius: 10px;
   background: #fff;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
   text-align: left;
 }
 
@@ -66,7 +47,6 @@ ul {
   margin-bottom: 18px;
 }
 
-/* ESPACE ENTRE CHAMPS */
 .register-card .mb-3 {
   margin-bottom: 1.25rem;
 }
@@ -99,4 +79,22 @@ ul {
 /* RED STAR */
 .text-danger {
   color: red;
+}
+
+/********BAR CARD*******/
+.bar-card {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border: 1px solid #ddd;
+  min-height: 260px;          /* <-- fixe la taille */
+}
+
+.bar-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.18);
+}
+
+.bar-card.inactive {
+  background-color: #f8f9fa;
+  opacity: 0.8;
 }

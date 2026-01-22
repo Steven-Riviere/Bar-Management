@@ -1,55 +1,64 @@
 import Bar from '../../models/bar.js';
 
 const barsData = [
-    {
-        name: 'Bar\'aka',
-        address: '35 rue Baker Street',
-        tel: '02-47-XX-XX-XX',
-        description: 'le meilleur bar du quartier de guillotière',
-    },
-    {
-        name: 'Baroque',
-        address: '48 rue Baker Street',
-        tel: '02-47-XX-XX-XX',
-        description: 'Un lieu d\'exception',
-    },
-    {
-        name: 'Las Ketchup',
-        address: '118 rue de Nazareth',
-        tel: '02-47-XX-XX-XX',
-        description: 'Situé dans la rue de Jesus, néanmoins nous ne faisons pas de miracle',
-    },
-    {
-        name: 'Bratislaboys',
-        address: '45 rue du papa pingouin',
-        tel: '09-47-XX-XX-XX',
-        description: 'revivez les meilleurs décennies dans cette ambiance de folie',
-    },
-    {
-        name: 'Crazy Frog',
-        address: '20 000 lieux sous la mer',
-        tel: '02-47-XX-XX-XX',
-        description: 'Cet établissement est la copie conforme d\'un navire, entre marée haute et basse. Tenez vous bien pour les odeurs',
-    },
-    {
-        name: 'Destinyz',
-        address: '25 rue des divas',
-        tel: '02-47-XX-XX-XX',
-        description: 'le bar où une seule reine peut survivre, challenge et Karaoké permanent dans ce bar. Venez montrer au monde vos vocalises',
-    },
-    {
-        name: 'RaouBar',
-        address: '8 rue du perdu',
-        tel: '02-47-XX-XX-XX',
-        description: 'si vous trouvez ce bar, vous avez gagné un verre de gin de 3L',
-    },
-    {
-        name: 'Shéhérazade',
-        address: '354 rue du désert',
-        tel: '02-47-XX-XX-XX',
-        description: 'le bar le plus caliente du quartier, revivez les 1000 et une nuit',
-    },
+  {
+    name: "Le Comptoir Central",
+    address: "12 Rue de la République",
+    cp: "69001",
+    city: "Lyon",
+    tel: "04 72 00 00 01"
+  },
+  {
+    name: "Bar du Marché",
+    address: "8 Place des Jacobins",
+    cp: "69002",
+    city: "Lyon",
+    tel: "04 72 00 00 02"
+  },
+  {
+    name: "Le Bistrot Moderne",
+    address: "21 Rue de la Barre",
+    cp: "69002",
+    city: "Lyon",
+    tel: "04 72 00 00 03"
+  },
+  {
+    name: "La Terrasse Urbaine",
+    address: "5 Quai de la Pêcherie",
+    cp: "69009",
+    city: "Lyon",
+    tel: "04 72 00 00 04"
+  },
+  {
+    name: "Le Café Industriel",
+    address: "14 Rue des Docks",
+    cp: "69007",
+    city: "Lyon",
+    tel: "04 72 00 00 05"
+  },
+  {
+    name: "L’Atelier des Bars",
+    address: "3 Rue du Bon Pasteur",
+    cp: "69001",
+    city: "Lyon",
+    tel: "04 72 00 00 06"
+  },
+  {
+    name: "Le Carré des Vins",
+    address: "27 Rue Mercière",
+    cp: "69002",
+    city: "Lyon",
+    tel: "04 72 00 00 07"
+  },
+  {
+    name: "La Cave à Cocktails",
+    address: "9 Rue de la Charité",
+    cp: "69002",
+    city: "Lyon",
+    tel: "04 72 00 00 08"
+  },
 ];
+
 
 const seedBar = async () => {
   try {

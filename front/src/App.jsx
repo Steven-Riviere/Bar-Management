@@ -3,10 +3,10 @@ import NavBar from "./components/NavBar.jsx";
 import LoginPage from "./pages/auth/LoginPage.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import useAuth from "./hooks/useAuth.js";
-import './App.css';
 import { ROUTE_BARS, ROUTE_BEERS, ROUTE_ORDERS, ROUTE_PAYMENTS, ROUTE_TABLES, ROUTE_USERS, ROUTE_LOGIN, ROUTE_SIGNUP } from "./constante";
 import AuthWatcher from "./AuthWatcher.jsx";
 import RegisterPage from "./pages/auth/RegisterPage.jsx";
+import BarsList from "./pages/bars/BarsList.jsx";
 
 function App() {
   const { user, setUser, loading, checkAuth } = useAuth();
@@ -40,7 +40,7 @@ function App() {
             path={ROUTE_BARS}
             element={
               <ProtectedRoute checkAuth={checkAuth}>
-                <div>Page Bars</div>
+                <BarsList/>
               </ProtectedRoute>
             }
           />

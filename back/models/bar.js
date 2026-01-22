@@ -6,14 +6,21 @@ const Bar = sequelize.define('Bar',{
         type: DataTypes.STRING,
         unique:true,
     },
-    address: DataTypes.STRING, 
+    address: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    cp: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    city: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
     tel: {
         type: DataTypes.STRING,
-        allowNull:false
-    },
-    description: {
-        type: DataTypes.TEXT,
-        allowNull:false
+        allowNull: false
     },
     active: {
         type: DataTypes.BOOLEAN,

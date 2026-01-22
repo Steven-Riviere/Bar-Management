@@ -2,10 +2,6 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import User from "../models/user.js";
 
-function validatePassword(password) {
-    const regex = /^(?=.*[A-Z])(?=.*\d).{8,}$/;
-    return regex.test(password);
-}
 
 export async function login(email, password) {
     const user = await User.findOne({ where: { email } });
@@ -45,14 +41,6 @@ export async function login(email, password) {
 
 export async function signup(data) {
     const { name, email, password, role } = data;
-
-    if (!name || !email || !password) {
-        throw new Error("Tous les champs sont obligatoires");
-    }
-
-    if (!validatePassword(password)) {
-        throw new Error("Mot de passe trop faible (8 caractères, 1 majuscule, 1 chiffre).");
-    }
 
     const exists = await User.findOne({ where: { email } });
     if (exists) {

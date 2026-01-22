@@ -18,9 +18,14 @@ function NavBar({ user, onLogout }) {
   if (!user) return null; // ne rien afficher si non connecté
 
   return (
-    <nav className='navbar navbar-expand-lg navbar-dark bg-dark'>
-      <div className='container-fluid'>
-        <strong>Gestion des bars</strong>
+    <nav className="navbar navbar-expand-lg navbar-dark bg-dark my-navbar">
+      <div className="container">
+
+        <strong className="navbar-brand">Gestion des bars</strong>
+
+        <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+          <span className="navbar-toggler-icon"></span>
+        </button>
 
         <div className="collapse navbar-collapse justify-content-center" id="navbarNav">
           <ul className="navbar-nav">
@@ -43,14 +48,14 @@ function NavBar({ user, onLogout }) {
               <Link className="nav-link" to={ROUTE_USERS}>Utilisateurs</Link>
             </li>
           </ul>
-          <ul className="navbar-nav ms-auto">
-            <li className="nav-item">
-              <button className="btn btn-outline-light" onClick={handleLogout}>
-                Déconnexion
-              </button>
-            </li>
-          </ul>
         </div>
+        <ul className="navbar-nav ms-auto">
+          <li className="nav-item">
+            <button className="btn btn-outline-light" onClick={handleLogout}>
+              Déconnexion
+            </button>
+          </li>
+        </ul>
       </div>
     </nav>
   );
