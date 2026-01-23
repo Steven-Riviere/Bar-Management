@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import { fetchBars, deactivateBar, enableBar  } from "../../api/apiBar";
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBan, faCheck } from "@fortawesome/free-solid-svg-icons";
+import { faBan, faCheck, faEye } from "@fortawesome/free-solid-svg-icons";
 import { ROUTE_BAR_CREATE } from "../../constante";
 
 const BarsList = () => {
@@ -61,7 +61,7 @@ const BarsList = () => {
                         </span>
                         <p className='description'>
                         {bar.address}<br/>
-                        {bar.cp}<br/>
+                        {bar.postalCode}<br/>
                         {bar.city}<br/>
                         {bar.tel}<br/>
                         </p>
@@ -83,6 +83,13 @@ const BarsList = () => {
                             <FontAwesomeIcon icon={faCheck} />
                             </button>
                         )}
+                        <Link
+                          to={`/bars/${bar.id}/edit`}
+                          className="btn btn-secondary btn-sm"
+                          title="Consulter le bar"
+                        >
+                          <FontAwesomeIcon icon={faEye} />
+                        </Link>
                         </div>
                     </div>
                 </div>

@@ -10,7 +10,7 @@ const Bar = sequelize.define('Bar',{
         type: DataTypes.STRING,
         allowNull: false
     },
-    cp: {
+    postalCode: {
         type: DataTypes.STRING,
         allowNull: false
     },
