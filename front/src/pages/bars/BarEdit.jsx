@@ -75,7 +75,7 @@ const BarEdit = () => {
             Retour
         </button>
       </div>
-      <div className="register-card">
+      <div className="cardBase">
 
         <h2>Détails du bar</h2>
         {error && <div className="alert alert-danger">{error}</div>}

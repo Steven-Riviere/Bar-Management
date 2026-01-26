@@ -46,65 +46,65 @@ const BarCreate = () => {
                     Retour
                 </button>
             </div>
-            <div className="register-card">
+            <div className="cardBase">
 
-            <h2>Ajouter un bar</h2>
-            {error && <div className="alert alert-danger">{error}</div>}
+                <h2>Ajouter un bar</h2>
+                {error && <div className="alert alert-danger">{error}</div>}
 
-            <form onSubmit={handleSubmit}>
-                <div className="mb-3">
-                    <label className="form-label">Nom du bar</label>
-                    <input
-                    name="name"
-                    className="form-control"
-                    value={bar.name}
-                    onChange={handleChange}
-                    />
-                </div>
-                <div className="mb-3">
-                    <label className="form-label">Adresse</label>
-                    <input
-                    name="address"
-                    className="form-control"
-                    value={bar.address}
-                    onChange={handleChange}
-                    />
-                </div>
-                <div className="mb-3">
-                    <label className="form-label">Code postal</label>
-                    <input
-                    name="postalCode"
-                    className="form-control"
-                    value={bar.postalCode}
-                    onChange={handleChange}
-                    />
-                </div>
-                <div className="mb-3">
-                    <label className="form-label">Ville</label>
-                    <input
+                <form onSubmit={handleSubmit}>
+                    <div className="mb-3">
+                        <label className="form-label">Nom du bar</label>
+                        <input
+                        name="name"
                         className="form-control"
-                        name="city"
-                        value={bar.city}
+                        value={bar.name}
                         onChange={handleChange}
-                    />
-                </div>
-                <div className="mb-3">
-                    <label className="form-label">Téléphone</label>
-                    <input
+                        />
+                    </div>
+                    <div className="mb-3">
+                        <label className="form-label">Adresse</label>
+                        <input
+                        name="address"
                         className="form-control"
-                        name="tel"
-                        value={bar.tel}
+                        value={bar.address}
                         onChange={handleChange}
-                    />
-                </div>
-                <div className="d-flex justify-content-end mt-4">
-                    <button type="submit" className="btn btn-primary">
-                        Enregistrement
-                    </button>
-                </div>
-            </form>
+                        />
+                    </div>
+                    <div className="mb-3">
+                        <label className="form-label">Code postal</label>
+                        <input
+                        name="postalCode"
+                        className="form-control"
+                        value={bar.postalCode}
+                        onChange={handleChange}
+                        />
+                    </div>
+                    <div className="mb-3">
+                        <label className="form-label">Ville</label>
+                        <input
+                            className="form-control"
+                            name="city"
+                            value={bar.city}
+                            onChange={handleChange}
+                        />
+                    </div>
+                    <div className="mb-3">
+                        <label className="form-label">Téléphone</label>
+                        <input
+                            className="form-control"
+                            name="tel"
+                            value={bar.tel}
+                            onChange={handleChange}
+                        />
+                    </div>
+                    <div className="d-flex justify-content-end mt-4">
+                        <button type="submit" className="btn btn-primary">
+                            Enregistrement
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
-    </div>
     );
 };
 

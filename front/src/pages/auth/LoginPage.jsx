@@ -25,7 +25,7 @@ function LoginPage({ onLogin }) {
   };
 
   return (
-    <div className="register-card">
+    <div className="cardBase">
         <h2>Connexion</h2>
         {error && <div className="alert alert-danger">{error}</div>}
         <p className="text-muted">

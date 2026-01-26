@@ -26,7 +26,7 @@ function RegisterPage({onRegister}) {
   };
 
   return (
-    <div className="register-card">
+    <div className="cardBase">
         <h2>Création de compte</h2>
         {error && <div className="alert alert-danger">{error}</div>}
         <form onSubmit={handleSubmit}>
