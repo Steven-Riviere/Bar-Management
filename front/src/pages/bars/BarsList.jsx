@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import { fetchBars, deactivateBar, enableBar  } from "../../api/apiBar";
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBan, faCheck, faEye } from "@fortawesome/free-solid-svg-icons";
+import { faBan, faCheck, faEye, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { ROUTE_BAR_CREATE } from "../../constante";
 
 const BarsList = () => {
@@ -48,7 +48,15 @@ const BarsList = () => {
     return (
     <div>
         <div className="d-flex justify-content-end mb-4">
-        <Link to={ROUTE_BAR_CREATE} className="btn btn-primary">Ajouter un Bar</Link>
+        <Link
+          to={`/bars/new`}
+          className="btn btn-primary btn-lg"
+          title="Ajouter un bar"
+        >
+          <FontAwesomeIcon icon={faPlus} className="me-2" />
+          Ajouter un bar
+        </Link>
+
         </div>
         <div className="row">
         {bars.map(bar => (
@@ -65,7 +73,7 @@ const BarsList = () => {
                         {bar.city}<br/>
                         {bar.tel}<br/>
                         </p>
-                        <div className="position-absolute" style={{ right: 8, bottom: 8 }}>
+                        <div className="position-absolute d-flex gap-2" style={{ right: 8, bottom: 8 }}>
                         {bar.active ? (
                             <button
                             className="btn btn-danger btn-sm"

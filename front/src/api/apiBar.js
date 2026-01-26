@@ -18,7 +18,7 @@ apiFetch(`/bars/${id}`, {
 
 export const deactivateBar = (id) =>
 apiFetch(`/bars/${id}`, {
-    method: "DELETE",
+    method: "PATCH",
 });
 
 export const enableBar = (id) =>

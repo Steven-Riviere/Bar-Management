@@ -58,92 +58,105 @@ const BarEdit = () => {
       await updateBar(id, bar);
       navigate("/bars"); // retour à la liste
     } catch (err) {
-      setError("Erreur lors de la sauvegarde");
+      setError(err.response?.data?.error || "Erreur lors de la sauvegarde");
     }
+  };
+
+  const handleBack = () => {
+    navigate('/bars');
   };
 
   if (loading) return <div>Loading...</div>;
 
   return (
-    <div className="register-card">
-
-      <h2>Détails du bar</h2>
-      {error && <div className="alert alert-danger">{error}</div>}
-
-      <div className="d-flex justify-content-end mb-3">
-        <button
-          type="button"
-          className="btn btn-outline-secondary btn-sm"
-          onClick={() => setIsEditing(true)}
-          title="Modifier le bar"
-        >
-          <FontAwesomeIcon icon={faPenToSquare} />
+    <div className="bar-create-page">
+      <div className="d-flex justify-content-start mb-3">
+        <button type="button" className="btn btn-secondary" onClick={handleBack}>
+            Retour
         </button>
       </div>
+      <div className="register-card">
 
+        <h2>Détails du bar</h2>
+        {error && <div className="alert alert-danger">{error}</div>}
 
-      <form onSubmit={handleSubmit}>
-        <div className="mb-3">
-          <label>Nom</label>
-          <input
-            className="form-control"
-            name="name"
-            value={bar.name}
-            onChange={handleChange}
-            disabled={!isEditing}
-          />
-        </div>
-
-        <div className="mb-3">
-          <label>Adresse</label>
-          <input
-            className="form-control"
-            name="address"
-            value={bar.address}
-            onChange={handleChange}
-            disabled={!isEditing}
-          />
-        </div>
-
-        <div className="mb-3">
-          <label>Code Postal</label>
-          <input
-            className="form-control"
-            name="postalCode"
-            value={bar.postalCode}
-            onChange={handleChange}
-            disabled={!isEditing}
-          />
-        </div>
-
-        <div className="mb-3">
-          <label>Ville</label>
-          <input
-            className="form-control"
-            name="city"
-            value={bar.city}
-            onChange={handleChange}
-            disabled={!isEditing}
-          />
-        </div>
-
-        <div className="mb-3">
-          <label>Téléphone</label>
-          <input
-            className="form-control"
-            name="tel"
-            value={bar.tel}
-            onChange={handleChange}
-            disabled={!isEditing}
-          />
-        </div>
-
-        {isEditing && (
-          <button className="btn btn-primary" type="submit">
-            Save
+        <div className="d-flex justify-content-end mb-3">
+          <button
+            type="button"
+            className="btn btn-outline-secondary btn-sm"
+            onClick={() => setIsEditing(true)}
+            title="Modifier le bar"
+          >
+            <FontAwesomeIcon icon={faPenToSquare} />
           </button>
-        )}
-      </form>
+        </div>
+
+        <form onSubmit={handleSubmit}>
+          <div className="mb-3">
+            <label className="form-label">Nom</label>
+            <input
+              className="form-control"
+              name="name"
+              value={bar.name}
+              onChange={handleChange}
+              disabled={!isEditing}
+            />
+          </div>
+
+          <div className="mb-3">
+            <label className="form-label">Adresse</label>
+            <input
+              className="form-control"
+              name="address"
+              value={bar.address}
+              onChange={handleChange}
+              disabled={!isEditing}
+            />
+          </div>
+
+          <div className="mb-3">
+            <label className="form-label">Code Postal</label>
+            <input
+              className="form-control"
+              name="postalCode"
+              value={bar.postalCode}
+              onChange={handleChange}
+              disabled={!isEditing}
+            />
+          </div>
+
+          <div className="mb-3">
+            <label className="form-label">Ville</label>
+            <input
+              className="form-control"
+              name="city"
+              value={bar.city}
+              onChange={handleChange}
+              disabled={!isEditing}
+            />
+          </div>
+
+          <div className="mb-3">
+            <label className="form-label">Téléphone</label>
+            <input
+              className="form-control"
+              name="tel"
+              value={bar.tel}
+              onChange={handleChange}
+              disabled={!isEditing}
+            />
+          </div>
+
+          {isEditing && (
+            <div className="d-flex justify-content-end mt-4">
+              <button className="btn btn-primary" type="submit">
+                Enregistrement
+              </button>
+            </div>
+          )}
+
+        </form>
+      </div>
     </div>
   );
 };
