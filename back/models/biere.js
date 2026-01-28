@@ -2,7 +2,11 @@ import {DataTypes} from "sequelize";
 import sequelize from "../config/database.js";
 
 const Biere = sequelize.define('Biere', {
-    name: DataTypes.STRING,
+    name: {
+        type: DataTypes.STRING,
+        unique: true
+    },
+
     description: {
         type: DataTypes.TEXT,
         allowNull:false

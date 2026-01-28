@@ -19,19 +19,13 @@ export async function updateBeer(id, data) {
     return beer;
 }
 
-export async function disableBeer(id) {
+export async function patchBeer(id, data) {
   const beer = await Biere.findByPk(id);
   if (!beer) return null;
-  beer.active = false;
 
-  await beer.save();
-  return beer;
-}
-
-export async function enableBeer(id) {
-  const beer = await Biere.findByPk(id);
-  if (!beer) return null;
-  beer.active = true;
+  if(typeof data.active === "boolean") {
+    beer.active = data.active;
+  }
 
   await beer.save();
   return beer;

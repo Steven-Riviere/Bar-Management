@@ -9,6 +9,7 @@ import RegisterPage from "./pages/auth/RegisterPage.jsx";
 import BarsList from "./pages/bars/BarsList.jsx";
 import BarEdit from "./pages/bars/BarEdit.jsx";
 import BarCreate from "./pages/bars/BarCreate.jsx";
+import BeersList from "./pages/beers/BeersList.jsx";
 
 function App() {
   const { user, setUser, loading, checkAuth } = useAuth();
@@ -67,7 +68,7 @@ function App() {
             path={ROUTE_BEERS}
             element={
               <ProtectedRoute checkAuth={checkAuth}>
-                <div>Page Bières</div>
+                <BeersList/>
               </ProtectedRoute>
             }
           />

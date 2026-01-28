@@ -19,18 +19,14 @@ export async function updateBar(id, data) {
     return bar;
 }
 
-export async function disableBar(id) {
+export async function patchBar(id, data) {
   const bar = await Bar.findByPk(id);
   if (!bar) return null;
-  bar.active = false;
-  await bar.save();
-  return bar;
-}
 
-export async function enableBar(id) {
-  const bar = await Bar.findByPk(id);
-  if (!bar) return null;
-  bar.active = true;
+  if (typeof data.active === "boolean") {
+    bar.active = data.active;
+  }
+
   await bar.save();
   return bar;
 }

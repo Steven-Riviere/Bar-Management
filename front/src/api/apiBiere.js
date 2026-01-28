@@ -16,12 +16,8 @@ export const updateBeer = (id, biere) =>
         body: JSON.stringify(biere),
     });
 
-export const deactivateBeer = (id) =>
-    apiFetch(`/bieres/${id}`, {
-        method: "DELETE",
-    });
-
-export const enableBeer = (id) =>
+export const patchBeer = (id, data) =>
     apiFetch(`/bieres/${id}`, {
         method: "PATCH",
-    });
+        body: JSON.stringify(data),
+  });

@@ -38,25 +38,13 @@ export async function update(req, res) {
     }
 }
 
-export async function deactivate(req, res) {
+export async function patch(req, res) {
   try {
-    const beer = await service.disableBeer(req.params.id);
+    const beer = await service.patchBeer(req.params.id, req.body);
     if (!beer)
       return res.status(404).json({ error: "Bière non trouvée" });
 
-    res.json({ message: "Bière désactivée", beer });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-}
-
-export async function restore(req, res) {
-  try {
-    const beer = await service.enableBeer(req.params.id);
-    if (!beer)
-      return res.status(404).json({ error: "Bière non trouvée" });
-
-    res.json({ message: "Bière réactivée", beer });
+    res.json(beer);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

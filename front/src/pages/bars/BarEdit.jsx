@@ -69,7 +69,7 @@ const BarEdit = () => {
   if (loading) return <div>Loading...</div>;
 
   return (
-    <div className="bar-create-page">
+    <div className="bar-edit-page">
       <div className="d-flex justify-content-start mb-3">
         <button type="button" className="btn btn-secondary" onClick={handleBack}>
             Retour

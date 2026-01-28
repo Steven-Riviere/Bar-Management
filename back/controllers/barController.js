@@ -50,18 +50,12 @@ export async function update(req, res) {
   }
 }
 
-export async function deactivateBar(req,res) {
-  const bar = await service.disableBar(req.params.id);
-  if(!bar) return res.status(404).json({ error: 'Bar non trouvé' });
-  res.json(bar);
-}
-
-export async function restoreBar(req, res) {
+export async function patch(req, res) {
   try {
-    const bar = await service.enableBar(req.params.id);
-    if (!bar) return res.status(404).json({ error: 'Bar non trouvé' });
+    const bar = await service.patchBar(req.params.id, req.body);
+    if (!bar) return res.status(404).json({ error: "Bar non trouvé" });
 
-    res.json({ message: 'Bar réactivé', bar });
+    res.json(bar);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

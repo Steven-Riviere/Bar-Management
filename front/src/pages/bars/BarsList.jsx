@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react"
-import { fetchBars, deactivateBar, enableBar  } from "../../api/apiBar";
+import { fetchBars, patchBar } from "../../api/apiBar";
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBan, faCheck, faEye, faPlus } from "@fortawesome/free-solid-svg-icons";
-import { ROUTE_BAR_CREATE } from "../../constante";
+
 
 const BarsList = () => {
-    const [bars, setBars] = useState([]);
+  const [bars, setBars] = useState([]);
 
   useEffect(() => {
     const loadBars = async () => {
@@ -22,30 +22,31 @@ const BarsList = () => {
   }, []);
 
     const handleDisable = async (id, e) => {
-    e.preventDefault();
-    try {
-        await deactivateBar(id);
-        setBars(bars.map(bar =>
-        bar.id === id ? { ...bar, active: false } : bar
-        ));
-    } catch (error) {
-      console.error('Failed to deactivate bar:', error);
-    }
-  };
+        e.preventDefault();
+        try {
+            await patchBar(id, { active: false });
+            setBars(bars.map(bar =>
+                bar.id === id ? { ...bar, active: false } : bar
+            ));
+        } catch (error) {
+            console.error('Failed to deactivate bar:', error);
+        }
+    };
 
     const handleEnable = async (id, e) => {
-    e.preventDefault();
-    try {
-        await enableBar(id);
-        setBars(bars.map(bar =>
-        bar.id === id ? { ...bar, active: true } : bar
-        ));
-    } catch (error) {
-      console.error('Failed to enable bar:', error);
-    }
-  };
+        e.preventDefault();
+        try {
+            await patchBar(id, { active: true });
+            setBars(bars.map(bar =>
+                bar.id === id ? { ...bar, active: true } : bar
+            ));
+        } catch (error) {
+            console.error('Failed to enable bar:', error);
+        }
+    };
 
-    return (
+
+  return (
     <div>
         <div className="d-flex justify-content-end mb-4">
           <Link
@@ -68,44 +69,44 @@ const BarsList = () => {
                     {bar.active ? "Actif" : "Inactif"}
                     </span>
                     <p className='description'>
-                    {bar.address}<br/>
-                    {bar.postalCode}<br/>
-                    {bar.city}<br/>
-                    {bar.tel}<br/>
+                      {bar.address}<br/>
+                      {bar.postalCode}<br/>
+                      {bar.city}<br/>
+                      {bar.tel}<br/>
                     </p>
                     <div className="position-absolute d-flex gap-2" style={{ right: 8, bottom: 8 }}>
-                    {bar.active ? (
-                        <button
-                        className="btn btn-danger btn-sm"
-                        title="Désactiver le bar"
-                        onClick={(e) => handleDisable(bar.id, e)}
-                        >
-                        <FontAwesomeIcon icon={faBan} />
-                        </button>
-                    ) : (
-                        <button
-                        className="btn btn-success btn-sm"
-                        title="Activer le bar"
-                        onClick={(e) => handleEnable(bar.id, e)}
-                        >
-                        <FontAwesomeIcon icon={faCheck} />
-                        </button>
-                    )}
-                    <Link
-                      to={`/bars/${bar.id}/edit`}
-                      className="btn btn-secondary btn-sm"
-                      title="Consulter le bar"
-                    >
-                      <FontAwesomeIcon icon={faEye} />
-                    </Link>
+                      {bar.active ? (
+                          <button 
+                          className="btn btn-danger btn-sm" 
+                          title="Désactiver le bar" 
+                          onClick={(e) => handleDisable(bar.id, e)} 
+                          >
+                            <FontAwesomeIcon icon={faBan} />
+                          </button>
+                      ) : (
+                          <button
+                          className="btn btn-success btn-sm"
+                          title="Activer le bar"
+                          onClick={(e) => handleEnable(bar.id, e)}
+                          >
+                            <FontAwesomeIcon icon={faCheck} />
+                          </button>
+                      )}
+                      <Link
+                        to={`/bars/${bar.id}/edit`}
+                        className="btn btn-secondary btn-sm"
+                        title="Consulter le bar"
+                      >
+                        <FontAwesomeIcon icon={faEye} />
+                      </Link>
+                    </div>
                   </div>
-                </div>
               </div>
             </div>
           ))}
         </div>
     </div>
-    );
+  );
 };
 
 export default BarsList;
