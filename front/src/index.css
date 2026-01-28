@@ -85,7 +85,7 @@ body{
 }
 
 /* INPUT */
-.cardBase input.form-control {
+.cardBase input.form-control, .cardBase textarea.form-control {
   border: none;
   background-color: #e9ecef;
   border-radius: 5px;
@@ -111,19 +111,19 @@ body{
 }
 
 /********BAR CARD*******/
-.bar-card {
+.card-item {
   box-shadow: 12px 16px 12px rgba(0, 0, 0, 0.12);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   border: 1px solid #ddd;
   min-height: 260px;
 }
 
-.bar-card:hover {
+.card-item:hover {
   transform: translateY(-3px);
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.18);
 }
 
-.bar-card.inactive {
+.card-item.inactive {
   background-color: #f8f9fa;
   opacity: 0.8;
 }

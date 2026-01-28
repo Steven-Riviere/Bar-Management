@@ -1,4 +1,5 @@
 import * as service from "../services/biereService.js";
+import { validateBeer } from "../validators/beerValidator.js";
 
 export async function getAll(req,res) {
     try {
@@ -21,6 +22,11 @@ export async function getOne(req,res) {
 
 export async function create(req, res) {
     try {
+        const validationError = validateBeer(req.body);
+        if(validationError) {
+        return res.status(400).json({error: validationError});
+        }
+
         const beer = await service.createBeer(req.body);
         res.status(201).json(beer);
     } catch (err) {
@@ -30,6 +36,11 @@ export async function create(req, res) {
 
 export async function update(req, res) {
     try {
+        const validationError = validateBeer(req.body);
+        if (validationError) {
+        return res.status(400).json({ error: validationError });
+        }
+
         const beer = await service.updateBeer(req.params.id, req.body);
         if (!beer) return res.status(404).json({ error: "Bière non trouvée" });
         res.json(beer);

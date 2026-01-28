@@ -59,7 +59,7 @@ const BeersList = () => {
             <div className="row">
             {beers.map(beer => (
                 <div className="col-md-3 mb-4" key={beer.id}>
-                    <div className={`card h-100 beer-card position-relative ${!beer.active ? "inactive" : ""}`}>
+                    <div className={`card h-100 card-item position-relative ${!beer.active ? "inactive" : ""}`}>
                         <div className="card-body">
                             <h3 className="card-title">{beer.name}</h3>
                             <span className={`badge ${beer.active ? "bg-success" : "bg-secondary"} mb-2`}>
@@ -87,9 +87,9 @@ const BeersList = () => {
                                         <FontAwesomeIcon icon={faCheck} />
                                     </button>
                                 )}
-                                <Link to={'/bars'} 
+                                <Link to={`/bieres/${beer.id}/edit`} 
                                     className="btn btn-secondary btn-sm"
-                                    title="Consulter le bar"
+                                    title="Consulter la bière"
                                 >
                                     <FontAwesomeIcon icon={faEye} />
                                 </Link>

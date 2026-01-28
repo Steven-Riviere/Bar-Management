@@ -3,13 +3,14 @@ import NavBar from "./components/NavBar.jsx";
 import LoginPage from "./pages/auth/LoginPage.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import useAuth from "./hooks/useAuth.js";
-import { ROUTE_BARS, ROUTE_BEERS, ROUTE_ORDERS, ROUTE_PAYMENTS, ROUTE_TABLES, ROUTE_USERS, ROUTE_LOGIN, ROUTE_SIGNUP, ROUTE_BAR_EDIT, ROUTE_BAR_CREATE } from "./constante";
+import { ROUTE_BARS, ROUTE_BEERS, ROUTE_ORDERS, ROUTE_PAYMENTS, ROUTE_TABLES, ROUTE_USERS, ROUTE_LOGIN, ROUTE_SIGNUP, ROUTE_BAR_EDIT, ROUTE_BAR_CREATE, ROUTE_BEER_EDIT } from "./constante";
 import AuthWatcher from "./AuthWatcher.jsx";
 import RegisterPage from "./pages/auth/RegisterPage.jsx";
 import BarsList from "./pages/bars/BarsList.jsx";
 import BarEdit from "./pages/bars/BarEdit.jsx";
 import BarCreate from "./pages/bars/BarCreate.jsx";
 import BeersList from "./pages/beers/BeersList.jsx";
+import BeerEdit from "./pages/beers/BeerEdit.jsx";
 
 function App() {
   const { user, setUser, loading, checkAuth } = useAuth();
@@ -69,6 +70,15 @@ function App() {
             element={
               <ProtectedRoute checkAuth={checkAuth}>
                 <BeersList/>
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path={ROUTE_BEER_EDIT}
+            element={
+              <ProtectedRoute checkAuth={checkAuth}>
+                <BeerEdit/>
               </ProtectedRoute>
             }
           />
