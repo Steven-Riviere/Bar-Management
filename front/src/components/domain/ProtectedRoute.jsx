@@ -1,6 +1,6 @@
 import { Navigate, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
-import apiFetch from "../api/apiClient.js";
+import apiFetch from "../../api/apiClient.js";
 
 export default function ProtectedRoute({ children, checkAuth }) {
   const [isAuth, setIsAuth] = useState(null);

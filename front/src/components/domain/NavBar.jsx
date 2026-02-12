@@ -1,6 +1,6 @@
 import { NavLink, useNavigate } from 'react-router-dom';
-import apiFetch from "../api/apiClient.js";
-import { ROUTE_BARS, ROUTE_BEERS, ROUTE_ORDERS, ROUTE_PAYMENTS, ROUTE_TABLES, ROUTE_USERS, ROUTE_LOGIN } from '../constante';
+import apiFetch from "../../api/apiClient.js";
+import { ROUTE_BARS, ROUTE_BEERS, ROUTE_ORDERS, ROUTE_PAYMENTS, ROUTE_TABLES, ROUTE_USERS, ROUTE_LOGIN } from '../../constante.js';
 
 function NavBar({ user, onLogout }) {
   const navigate = useNavigate();

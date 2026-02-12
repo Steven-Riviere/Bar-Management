@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-import NavBar from "./components/NavBar.jsx";
+import NavBar from "./components/domain/NavBar.jsx";
 import LoginPage from "./pages/auth/LoginPage.jsx";
-import ProtectedRoute from "./components/ProtectedRoute.jsx";
+import ProtectedRoute from "./components/domain/ProtectedRoute.jsx";
 import useAuth from "./hooks/useAuth.js";
 import { ROUTE_BARS, ROUTE_BEERS, ROUTE_ORDERS, ROUTE_PAYMENTS, ROUTE_TABLES, ROUTE_USERS, ROUTE_LOGIN, ROUTE_SIGNUP, ROUTE_BAR_EDIT, ROUTE_BAR_CREATE, ROUTE_BEER_EDIT } from "./constante";
 import AuthWatcher from "./AuthWatcher.jsx";

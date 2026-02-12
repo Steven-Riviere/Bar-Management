@@ -1,106 +1,71 @@
 import { useEffect, useState } from "react"
-import { fetchBeers, patchBeer } from "../../api/apiBiere";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBan, faCheck, faEye, faPlus } from "@fortawesome/free-solid-svg-icons";
-import { Link } from "react-router-dom";
+import { fetchBeers, patchBeer } from "../../api/apiBiere"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faPlus } from "@fortawesome/free-solid-svg-icons"
+import { Link } from "react-router-dom"
+import { CardBeer } from "../../components/domain/CardBeer"
+import { Button } from "../../components/ui/button"
 
 const BeersList = () => {
-    const [beers, setBeers] = useState([]);
+  const [beers, setBeers] = useState([])
 
-    useEffect(() => {
-        const loadBeers = async () => {
-            try {
-            const beersData = await fetchBeers();
-            setBeers(beersData);
-            } catch (error) {
-                console.error("Failed to fetch beers:", error);
-            }
-        };
-        loadBeers();
-    }, []);
+  useEffect(() => {
+    const loadBeers = async () => {
+      try {
+        const data = await fetchBeers()
+        setBeers(data)
+      } catch (err) {
+        console.error("Failed to fetch beers:", err)
+      }
+    }
+    loadBeers()
+  }, [])
 
-    const handleDisable = async(id, e) => {
-        e.preventDefault();
-        try {
-            await patchBeer(id, {active:false});
-            setBeers(beers.map(beer =>
-                beer.id === id ? {...beer, active: false} : beer   
-            ));
-        } catch (error) {
-            console.error("Failed to deactivate beer :", error);
-        }
-    };
+  const handleDisable = async (id) => {
+    try {
+      await patchBeer(id, { active: false })
+      setBeers(beers.map(b => b.id === id ? { ...b, active: false } : b))
+    } catch (err) {
+      console.error("Failed to disable beer:", err)
+    }
+  }
 
-    const handleEnable = async (id, e) => {
-        e.preventDefault();
-        try {
-            await patchBeer(id, {active:true});
-            setBeers(beers.map(beer => 
-                beer.id === id ? {...beer, active: true} : beer
-            ));
-        } catch(error) {
-            console.error('Failed to enable beer:', error);
-        }
-    };
+  const handleEnable = async (id) => {
+    try {
+      await patchBeer(id, { active: true })
+      setBeers(beers.map(b => b.id === id ? { ...b, active: true } : b))
+    } catch (err) {
+      console.error("Failed to enable beer:", err)
+    }
+  }
 
-    return (
-        <div>
-            <div className="d-flex justify-content-end mb-4">
-                <Link
-                    to={`/bieres/new`}
-                    className="btn btn-primary btn-lg"
-                    title="Ajouter une bière"
-                >
-                    <FontAwesomeIcon icon={faPlus} className="me-2" />
-                    Ajouter une bière
-                </Link>
-            </div>
+  return (
+    <div>
+      <div className="flex justify-end mb-4">
+        <Link to="/bieres/new">
+          <Button asChild>
+            <FontAwesomeIcon icon={faPlus} className="mr-2" />
+            Ajouter une bière
+          </Button>
+        </Link>
+      </div>
 
-            <div className="row">
-            {beers.map(beer => (
-                <div className="col-md-3 mb-4" key={beer.id}>
-                    <div className={`card h-100 card-item position-relative ${!beer.active ? "inactive" : ""}`}>
-                        <div className="card-body">
-                            <h3 className="card-title">{beer.name}</h3>
-                            <span className={`badge ${beer.active ? "bg-success" : "bg-secondary"} mb-2`}>
-                            {beer.active ? "Actif" : "Inactif"}
-                            </span>
-                            <p className="description">
-                                Degrès d'alcool : {beer.degree}°<br/>
-                                Prix de base : {beer.price}€<br/>
-                            </p>
-                            <div className="position-absolute d-flex gap-2" style={{right: 8, bottom: 8}}>
-                                {beer.active ? (
-                                    <button 
-                                    className="btn btn-danger btn-sm" 
-                                    title="Désactiver la bière" 
-                                    onClick={(e) => handleDisable(beer.id, e)}
-                                    >
-                                        <FontAwesomeIcon icon={faBan} />
-                                    </button>
-                                ) : (
-                                    <button 
-                                    className="btn btn-success btn-sm" 
-                                    title="Activer la bière" 
-                                    onClick={(e) => handleEnable(beer.id,e)} 
-                                    >
-                                        <FontAwesomeIcon icon={faCheck} />
-                                    </button>
-                                )}
-                                <Link to={`/bieres/${beer.id}/edit`} 
-                                    className="btn btn-secondary btn-sm"
-                                    title="Consulter la bière"
-                                >
-                                    <FontAwesomeIcon icon={faEye} />
-                                </Link>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            ))}
-            </div>
-        </div>
-    );
-};
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        {beers.map(beer => (
+          <CardBeer
+            key={beer.id}
+            beer={beer}
+            onDisable={() => handleDisable(beer.id)}
+            onEnable={() => handleEnable(beer.id)}
+            onView={() => console.log("Voir bière", beer.id)}
+          >
+            <p>Degrés d'alcool: {beer.degree}°</p>
+            <p>Prix: {beer.price}€</p>
+          </CardBeer>
+        ))}
+      </div>
+    </div>
+  )
+}
 
-export default BeersList;
+export default BeersList
