@@ -1,112 +1,78 @@
 import { useEffect, useState } from "react"
-import { fetchBars, patchBar } from "../../api/apiBar";
-import { Link } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBan, faCheck, faEye, faPlus } from "@fortawesome/free-solid-svg-icons";
-
+import { fetchBars, patchBar } from "../../api/apiBar"
+import { Link } from "react-router-dom"
+import { CardBar } from "../../components/domain/CardBar"
+import { Button } from "../../components/ui/button"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faPlus } from "@fortawesome/free-solid-svg-icons"
 
 const BarsList = () => {
-  const [bars, setBars] = useState([]);
+  const [bars, setBars] = useState([])
 
   useEffect(() => {
     const loadBars = async () => {
       try {
-        const barsData = await fetchBars();
-        setBars(barsData);
+        const barsData = await fetchBars()
+        setBars(barsData)
       } catch (error) {
-        console.error('Failed to fetch bars:', error);
+        console.error("Failed to fetch bars:", error)
       }
-    };
+    }
+    loadBars()
+  }, [])
 
-    loadBars();
-  }, []);
+  const handleDisable = async (id) => {
+    try {
+      await patchBar(id, { active: false })
+      setBars(bars.map(bar =>
+        bar.id === id ? { ...bar, active: false } : bar
+      ))
+    } catch (error) {
+      console.error("Failed to deactivate bar:", error)
+    }
+  }
 
-    const handleDisable = async (id, e) => {
-        e.preventDefault();
-        try {
-            await patchBar(id, { active: false });
-            setBars(bars.map(bar =>
-                bar.id === id ? { ...bar, active: false } : bar
-            ));
-        } catch (error) {
-            console.error('Failed to deactivate bar:', error);
-        }
-    };
-
-    const handleEnable = async (id, e) => {
-        e.preventDefault();
-        try {
-            await patchBar(id, { active: true });
-            setBars(bars.map(bar =>
-                bar.id === id ? { ...bar, active: true } : bar
-            ));
-        } catch (error) {
-            console.error('Failed to enable bar:', error);
-        }
-    };
-
+  const handleEnable = async (id) => {
+    try {
+      await patchBar(id, { active: true })
+      setBars(bars.map(bar =>
+        bar.id === id ? { ...bar, active: true } : bar
+      ))
+    } catch (error) {
+      console.error("Failed to enable bar:", error)
+    }
+  }
 
   return (
     <div>
-        <div className="d-flex justify-content-end mb-4">
-          <Link
-            to={`/bars/new`}
-            className="btn btn-primary btn-lg"
-            title="Ajouter un bar"
-          >
-            <FontAwesomeIcon icon={faPlus} className="me-2" />
+      <div className="flex justify-end mb-4">
+        <Link to="/bars/new" className="inline-flex items-center gap-2 no-underline">
+          <Button variant="add" className="hover:scale-110 transition-transform">
             Ajouter un bar
-          </Link>
+          </Button>
+        </Link>
+      </div>
 
-        </div>
-        <div className="row">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {bars.map(bar => (
-            <div className="col-md-3 mb-4" key={bar.id}>
-              <div className={`card h-100 card-item position-relative ${!bar.active ? "inactive" : ""}`}>
-                  <div className="card-body">
-                    <h3 className="card-title">{bar.name}</h3>
-                    <span className={`badge ${bar.active ? "bg-success" : "bg-secondary"} mb-2`}>
-                    {bar.active ? "Actif" : "Inactif"}
-                    </span>
-                    <p className='description'>
-                      {bar.address}<br/>
-                      {bar.postalCode}<br/>
-                      {bar.city}<br/>
-                      {bar.tel}<br/>
-                    </p>
-                    <div className="position-absolute d-flex gap-2" style={{ right: 8, bottom: 8 }}>
-                      {bar.active ? (
-                          <button 
-                          className="btn btn-danger btn-sm" 
-                          title="Désactiver le bar" 
-                          onClick={(e) => handleDisable(bar.id, e)} 
-                          >
-                            <FontAwesomeIcon icon={faBan} />
-                          </button>
-                      ) : (
-                          <button
-                          className="btn btn-success btn-sm"
-                          title="Activer le bar"
-                          onClick={(e) => handleEnable(bar.id, e)}
-                          >
-                            <FontAwesomeIcon icon={faCheck} />
-                          </button>
-                      )}
-                      <Link
-                        to={`/bars/${bar.id}/edit`}
-                        className="btn btn-secondary btn-sm"
-                        title="Consulter le bar"
-                      >
-                        <FontAwesomeIcon icon={faEye} />
-                      </Link>
-                    </div>
-                  </div>
-              </div>
-            </div>
-          ))}
-        </div>
+          <CardBar
+            key={bar.id}
+            bar={bar}
+            onDisable={() => handleDisable(bar.id)}
+            onEnable={() => handleEnable(bar.id)}
+            onView={() => console.log("Voir bar", bar.id)}
+          >
+            <p className="description">
+              {bar.address}<br/>
+              {bar.postalCode}<br/>
+              {bar.city}<br/>
+              {bar.tel}<br/>
+            </p>
+          </CardBar>
+        ))}
+      </div>
     </div>
-  );
-};
+  )
+}
 
-export default BarsList;
+export default BarsList
