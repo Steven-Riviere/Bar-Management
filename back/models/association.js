@@ -6,6 +6,9 @@ import Commande from "./commande.js";
 import Paiement from "./paiement.js";
 import CommandePaiement from "./commandePaiement.js";
 import Table from "./table.js";
+import Permission from "./permission.js";
+import User from "./user.js";
+import UserPermission from "./userPermission.js";
 
 // --- Associations --- //
 // Bar <-> Biere
@@ -28,6 +31,10 @@ Commande.belongsTo(Table, { foreignKey: "table_id" });
 Bar.hasMany(Table, { foreignKey: "bar_id" });
 Table.belongsTo(Bar, { foreignKey: "bar_id" });
 
+//User <-> Permission
+User.belongsToMany(Permission, { through: UserPermission, foreignKey: "user_id" });
+Permission.belongsToMany(User, { through: UserPermission, foreignKey: "permission_id" });
+
 export {
     Biere,
     Bar,
@@ -36,5 +43,8 @@ export {
     Commande,
     Paiement,
     CommandePaiement,
-    Table
+    Table,
+    Permission,
+    User,
+    UserPermission
 };

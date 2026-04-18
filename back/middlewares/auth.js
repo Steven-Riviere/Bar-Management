@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
+import { User, Permission } from "../models/association.js";
 
-export function authenticate(req, res, next) {
+export async function authenticate(req, res, next) {
   const token = req.cookies.token;
 
   if (!token) {
@@ -9,8 +10,28 @@ export function authenticate(req, res, next) {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = decoded;
+
+    // on récupere user et les permissions de l'utilisateur
+    const user = await User.findByPk(decoded.id, {
+      include: {
+        model: Permission,
+        attributes: ["name"],
+        through: { attributes: [] },
+      },
+    });
+
+    if (!user) {
+      return res.status(401).json({ error: "Utilisateur non trouvé" });
+    }
+
+    req.user = 
+    { id: user.id, 
+      role: user.role,
+      permissions: user.Permissions?.map(p => p.name) || []
+    };
+
     next();
+
   } catch {
     return res.status(401).json({ error: "Token invalide ou expiré" });
   }

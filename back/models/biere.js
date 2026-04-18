@@ -12,10 +12,6 @@ const Biere = sequelize.define('Biere', {
         allowNull:false
     },
     degree: DataTypes.FLOAT,
-    price: {
-        type: DataTypes.FLOAT,
-        min:(0),
-    },
     active: {
         type: DataTypes.BOOLEAN,
         defaultValue: true,

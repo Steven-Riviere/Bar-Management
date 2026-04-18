@@ -12,8 +12,18 @@ const seedBarBiere = async () => {
     const orangeMeca = await Biere.findOne({where: {name: "Orange Mécanique"}});
 
     //liaison
-    await baroque.addBiere(heineken);
-    await lasKetchup.addBiere(orangeMeca);
+    await baroque.addBiere(heineken, {
+      through: {
+        price: 5.00,
+        stock: 100
+      }
+    });
+    await lasKetchup.addBiere(orangeMeca, {
+      through: {
+        price: 6.50,
+        stock: 50
+      }
+    });
 
     console.info('✅ Database seeded!');
   } catch (error) {
