@@ -22,6 +22,10 @@ const Bar = sequelize.define('Bar',{
         type: DataTypes.STRING,
         allowNull: false
     },
+    type: {
+        type: DataTypes.ENUM("BAR", "WAREHOUSE"),
+        defaultValue: "BAR"
+    },
     active: {
         type: DataTypes.BOOLEAN,
         defaultValue: true,

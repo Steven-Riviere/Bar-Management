@@ -7,15 +7,15 @@ export async function applyMovement(data) {
     //CHECK STOCK AVANT OUT / TRANSFER SORTANT
     if (type === "OUT" || type === "TRANSFER") {
         if (from_bar_id) {
-            const barBiere = await BarBiere.findOne({
+            const stock = await BarBiere.findOne({
                 where: { bar_id: from_bar_id, biere_id }
             });
 
-            if (!barBiere) {
-                throw new Error("Stock introuvable pour ce bar");
+            if (!stock) {
+                throw new Error("Stock introuvable");
             }
 
-            if (barBiere.stock < quantity) {
+            if (stock.stock < quantity) {
                 throw new Error("Stock insuffisant");
             }
         }
@@ -31,6 +31,7 @@ export async function applyMovement(data) {
         });
     }
 
+    //réception des stocks
     if (type === "IN" && to_bar_id) {
         await BarBiere.increment("stock", {
         by: quantity,
@@ -38,6 +39,7 @@ export async function applyMovement(data) {
         });
     }
 
+    //transfert d'un bar <-> entrepôt
     if (type === "TRANSFER") {
         if (from_bar_id) {
             await BarBiere.decrement("stock", {
