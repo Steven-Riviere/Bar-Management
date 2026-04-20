@@ -4,6 +4,7 @@ import Commande from "../models/commande.js";
 import Table from "../models/table.js";
 import Biere from "../models/biere.js";
 import BiereCommande from "../models/biereCommande.js";
+import { applyMovement } from "./stockMovementService.js";
 
 export async function getAllOrders() {
     return Commande.findAll({
@@ -119,11 +120,21 @@ export async function addBeer(order, biere_id, quantity) {
     const beer = await Biere.findByPk(biere_id);
     if (!beer) throw new Error("Bière introuvable");
 
+    const table = await Table.findByPk(order.table_id);
+
     await order.addBeer(beer, {
         through: {
             quantity,
             unit_price: beer.price
         }
+    });
+
+    //Stock OUT
+    await applyMovement({
+        type: "OUT",
+        quantity,
+        biere_id,
+        from_bar_id: table.bar_id
     });
 
     const total = await calculateOrderTotal(order);
@@ -132,17 +143,30 @@ export async function addBeer(order, biere_id, quantity) {
     return order;
 }
 
-export async function updateBeer(commande_id, biere_id, quantity, unit_price) {
+export async function updateBeer(commande_id, biere_id, quantity) {
     const line = await BiereCommande.findOne({ where: { commande_id, biere_id } });
     if (!line) return null;
 
     if (quantity <= 0) throw new Error("Quantité invalide");
-    if (unit_price !== undefined) line.unit_price = unit_price;
+
+    const diff = quantity - line.quantity;
+
     line.quantity = quantity;
-    
     await line.save();
 
     const order = await Commande.findByPk(commande_id);
+    const table = await Table.findByPk(order.table_id);
+
+    if (diff !== 0) {
+        await applyMovement({
+            type: diff > 0 ? "OUT" : "IN",
+            quantity: Math.abs(diff),
+            biere_id,
+            from_bar_id: diff > 0 ? table.bar_id : null,
+            to_bar_id: diff < 0 ? table.bar_id : null
+        });
+    }
+
     const total = await calculateOrderTotal(order);
     await order.update({ price: total });
 
@@ -150,11 +174,25 @@ export async function updateBeer(commande_id, biere_id, quantity, unit_price) {
 }
 
 export async function deleteBeer(commande_id, biere_id) {
-    await BiereCommande.destroy({
-        where: { commande_id, biere_id }
-    });
+    const line = await BiereCommande.findOne({ where: { commande_id, biere_id } });
+
+    if (!line) return true;
+
+    const quantity = line.quantity;
 
     const order = await Commande.findByPk(commande_id);
+    const table = await Table.findByPk(order.table_id);
+
+    await line.destroy();
+
+    // Retour en stock vu que commande supprimée
+    await applyMovement({
+        type: "IN",
+        quantity,
+        biere_id,
+        to_bar_id: table.bar_id
+    });
+
     const total = await calculateOrderTotal(order);
     await order.update({ price: total });
 

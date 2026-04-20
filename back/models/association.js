@@ -9,6 +9,7 @@ import Table from "./table.js";
 import Permission from "./permission.js";
 import User from "./user.js";
 import UserPermission from "./userPermission.js";
+import StockMovement from "./stockMovement.js";
 
 // --- Associations --- //
 // Bar <-> Biere
@@ -35,6 +36,13 @@ Table.belongsTo(Bar, { foreignKey: "bar_id" });
 User.belongsToMany(Permission, { through: UserPermission, foreignKey: "user_id" });
 Permission.belongsToMany(User, { through: UserPermission, foreignKey: "permission_id" });
 
+//Mouvement des stocks de biere
+Biere.hasMany(StockMovement, { foreignKey: "biere_id" });
+StockMovement.belongsTo(Biere, { foreignKey: "biere_id" });
+
+Bar.hasMany(StockMovement, { foreignKey: "from_bar_id", as: "fromMovements" });
+Bar.hasMany(StockMovement, { foreignKey: "to_bar_id", as: "toMovements" });
+
 export {
     Biere,
     Bar,
@@ -46,5 +54,6 @@ export {
     Table,
     Permission,
     User,
-    UserPermission
+    UserPermission,
+    StockMovement
 };

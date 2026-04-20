@@ -23,7 +23,7 @@ export async function addBeerToBar(bar_id, biere_id, data) {
         bar_id,
         biere_id,
         price: data.price,
-        stock: data.stock,
+        stock: 0,
         active: true,
     });
 
@@ -34,6 +34,9 @@ export async function updateBeerInBar(bar_id, biere_id, data) {
     const pivot = await BarBiere.findOne({ where: { bar_id, biere_id } });
     if (!pivot) return null;
 
+    if(data.stock !== undefined) {
+        throw new Error("Le stock ne peut pas être modifié ici.")
+    }
     await pivot.update(data);
     return pivot;
 }
