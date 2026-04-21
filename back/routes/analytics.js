@@ -10,3 +10,5 @@ router.get("/income/by-bar", authenticate, can("VIEW_ANALYTICS"), controller.inc
 router.get("/beers/top", authenticate, can("VIEW_ANALYTICS"), controller.topBeers);
 router.get("/sales/period", authenticate, can("VIEW_ANALYTICS"), controller.salesByPeriod);
 router.get("/stock/usage", authenticate, can("VIEW_ANALYTICS"), controller.stockUsage);
+
+export default router;

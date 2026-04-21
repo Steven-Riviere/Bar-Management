@@ -12,6 +12,7 @@ import commandesRoutes from './routes/commandes.js';
 import paiementsRoutes from './routes/paiements.js';
 import tablesRoutes from './routes/tables.js';
 import cookieParser from "cookie-parser";
+import analyticsRoutes from './routes/analytics.js';
 
 //env
 dotenv.config();
@@ -21,8 +22,10 @@ const port = 3000;
 
 //utilisation de CORS
 app.use(cors({
-    origin: "http://localhost:5173",
-    credentials: true
+  origin: "http://localhost:5173",
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type"],
 }));
 
 // Middleware pour parser les requêtes JSON
@@ -39,6 +42,7 @@ app.use('/barBiere', barBiereRoutes);
 app.use('/commandes', commandesRoutes);
 app.use('/paiements', paiementsRoutes);
 app.use('/tables', tablesRoutes);
+app.use('/analytics', analyticsRoutes);
 
 sequelize
   .sync()
@@ -46,6 +50,7 @@ sequelize
   .then(async () => {
     console.log('✅ Database & tables created!');
     await seedDatabase();
+    
   })
   .catch((err) => {
     console.error('Unable to connect to the database:', err);

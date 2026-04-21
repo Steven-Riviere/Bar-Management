@@ -24,6 +24,7 @@ const BarBiere = sequelize.define('BarBiere', {
     type: DataTypes.BOOLEAN,
     defaultValue: true,
   },
+  last_restock_at: DataTypes.DATE,
 
   disabled_at: DataTypes.DATE,
   disabled_by: DataTypes.INTEGER

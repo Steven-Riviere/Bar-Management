@@ -3,15 +3,17 @@ import CommandePaiement from "../models/commandePaiement.js";
 import Commande from "../models/commande.js";
 import Table from "../models/table.js";
 import Biere from "../models/biere.js";
+import BarBiere from "../models/barBiere.js";
 import BiereCommande from "../models/biereCommande.js";
 import { applyMovement } from "./stockMovementService.js";
+
 
 export async function getAllOrders() {
     return Commande.findAll({
         include: [
             { model: Table, include: ["Bar"] },
             { model: Paiement, through: { attributes: ["amount"] } },
-            { model: Biere, through: { attributes: ["quantity", "unit_price"] } }
+            { model: Biere, through: { attributes: ["quantity", "unitPrice"] } }
         ]
     });
 }
@@ -21,17 +23,17 @@ export async function getOrder(id) {
         include: [
             { model: Table, include: ["Bar"] },
             { model: Paiement, through: { attributes: ["amount"] } },
-            { model: Biere, through: { attributes: ["quantity", "unit_price"] } }
-
+            { model: Biere, through: { attributes: ["quantity", "unitPrice"] } }
         ]
     });
 }
 
 export async function createOrder(data) {
-        const table = await Table.findByPk(data.table_id);
-        if (!table) throw new Error("Table non trouvée");
-        return Commande.create({
-        table_id: table.id,
+    const table = await Table.findByPk(data.tableId);
+    if (!table) throw new Error("Table non trouvée");
+
+    return Commande.create({
+        tableId: table.id,
         date: data.date,
         price: 0,
         status: "en cours"
@@ -41,28 +43,35 @@ export async function createOrder(data) {
 export async function updateOrder(id, data) {
     const order = await Commande.findByPk(id);
     if (!order) throw new Error("Commande non trouvée");
+
     return order.update(data);
 }
 
 export async function deleteOrder(id) {
     const order = await Commande.findByPk(id);
     if (!order) throw new Error("Commande non trouvée");
+
     await order.destroy();
     return true;
 }
 
-export async function calculateOrderTotal(order) {
-    const beers = await order.getBieres({
-        joinTableAttributes: ["quantity", "unit_price"]
+export async function calculateOrderTotal(orderId) {
+    const lines = await BiereCommande.findAll({
+        where: { commandeId: orderId }
     });
-    return beers.reduce(
-        (sum, b) =>
-            sum + (b.BiereCommande.quantity * b.BiereCommande.unit_price),
-        0
+
+    const total = lines.reduce((sum, line) => {
+        return sum + (line.quantity * line.unitPrice);
+    }, 0);
+
+    await Commande.update(
+        { price: total },
+        { where: { id: orderId } }
     );
+
+    return total;
 }
 
-//Paiements associés à une commande
 export async function calculateBalance(order) {
     const payments = await order.getPayments({
         joinTableAttributes: ["amount"]
@@ -94,11 +103,11 @@ export async function addPayment(order, method, amount) {
     return calculateBalance(order);
 }
 
-export async function updatePayment(commande_id, paiement_id, amount) {
+export async function updatePayment(commandeId, paiementId, amount) {
     if (amount <= 0) throw new Error("Montant invalide");
 
     const pivot = await CommandePaiement.findOne({
-        where: { commande_id, paiement_id }
+        where: { commandeId, paiementId }
     });
 
     if (!pivot) return null;
@@ -109,44 +118,66 @@ export async function updatePayment(commande_id, paiement_id, amount) {
     return pivot;
 }
 
-export async function deletePayment(commande_id, paiement_id) {
-    return CommandePaiement.destroy({where: { commande_id, paiement_id }});
+export async function deletePayment(commandeId, paiementId) {
+    return CommandePaiement.destroy({
+        where: { commandeId, paiementId }
+    });
 }
 
-// Bière associée à une commande
-export async function addBeer(order, biere_id, quantity) {
+
+export async function addBeer(order, biereId, quantity, userId = null) {
     if (quantity <= 0) throw new Error("Quantité invalide");
 
-    const beer = await Biere.findByPk(biere_id);
+    const beer = await Biere.findByPk(biereId);
     if (!beer) throw new Error("Bière introuvable");
 
-    const table = await Table.findByPk(order.table_id);
+    const table = await Table.findByPk(order.tableId);
+    if (!table) throw new Error("Table introuvable");
+
+    const barBiere = await BarBiere.findOne({
+        where: {
+            barId: table.barId,
+            biereId
+        }
+    });
+
+    if (!barBiere) {
+        throw new Error("Bière non liée à ce bar");
+    }
+
+    if (!barBiere.active) {
+        throw new Error("Bière désactivée dans ce bar");
+    }
 
     await order.addBeer(beer, {
         through: {
             quantity,
-            unit_price: beer.price
+            unitPrice: barBiere.price
         }
     });
 
-    //Stock OUT
     await applyMovement({
         type: "OUT",
         quantity,
-        biere_id,
-        from_bar_id: table.bar_id
+        biereId,
+        fromBarId: table.barId,
+        userId,
+        reason: "SALE",
+        sourceType: "ORDER",
+        sourceId: order.id
     });
 
-    const total = await calculateOrderTotal(order);
-    await order.update({ price: total });
+    await calculateOrderTotal(order.id);
 
-    return order;
+    return getOrder(order.id);
 }
 
-export async function updateBeer(commande_id, biere_id, quantity) {
-    const line = await BiereCommande.findOne({ where: { commande_id, biere_id } });
-    if (!line) return null;
+export async function updateBeer(commandeId, biereId, quantity, userId = null) {
+    const line = await BiereCommande.findOne({
+        where: { commandeId, biereId }
+    });
 
+    if (!line) return null;
     if (quantity <= 0) throw new Error("Quantité invalide");
 
     const diff = quantity - line.quantity;
@@ -154,47 +185,54 @@ export async function updateBeer(commande_id, biere_id, quantity) {
     line.quantity = quantity;
     await line.save();
 
-    const order = await Commande.findByPk(commande_id);
-    const table = await Table.findByPk(order.table_id);
+    const order = await Commande.findByPk(commandeId);
+    const table = await Table.findByPk(order.tableId);
 
     if (diff !== 0) {
         await applyMovement({
             type: diff > 0 ? "OUT" : "IN",
             quantity: Math.abs(diff),
-            biere_id,
-            from_bar_id: diff > 0 ? table.bar_id : null,
-            to_bar_id: diff < 0 ? table.bar_id : null
+            biereId,
+            fromBarId: diff > 0 ? table.barId : null,
+            toBarId: diff < 0 ? table.barId : null,
+            userId,
+            reason: "SALE",
+            sourceType: "ORDER",
+            sourceId: commandeId
         });
     }
 
-    const total = await calculateOrderTotal(order);
-    await order.update({ price: total });
+    await calculateOrderTotal(commandeId);
 
     return line;
 }
 
-export async function deleteBeer(commande_id, biere_id) {
-    const line = await BiereCommande.findOne({ where: { commande_id, biere_id } });
+export async function deleteBeer(commandeId, biereId, userId = null) {
+    const line = await BiereCommande.findOne({
+        where: { commandeId, biereId }
+    });
 
     if (!line) return true;
 
     const quantity = line.quantity;
 
-    const order = await Commande.findByPk(commande_id);
-    const table = await Table.findByPk(order.table_id);
+    const order = await Commande.findByPk(commandeId);
+    const table = await Table.findByPk(order.tableId);
 
     await line.destroy();
 
-    // Retour en stock vu que commande supprimée
     await applyMovement({
         type: "IN",
         quantity,
-        biere_id,
-        to_bar_id: table.bar_id
+        biereId,
+        toBarId: table.barId,
+        userId,
+        reason: "ADJUSTMENT",
+        sourceType: "ORDER_DELETE",
+        sourceId: commandeId
     });
 
-    const total = await calculateOrderTotal(order);
-    await order.update({ price: total });
+    await calculateOrderTotal(commandeId);
 
     return true;
 }

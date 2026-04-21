@@ -8,8 +8,38 @@ const adminData = [
     password: "adminPassword123",
     role: "ADMIN",
     active: true,
-  }
+  },
+  {
+    name: "Gérant",
+    email: "gerant@example.com",
+    password: "gerantPassword123",
+    role: "GERANT",
+    active: true,
+  },
+  {
+    name: "BARMAN",
+    email: "barman@example.com",
+    password: "barmanPassword123",
+    role: "BARMAN",
+    active: true,
+  },
+  {
+    name: "SERVEUR",
+    email: "serveur@example.com",
+    password: "serveurPassword123",
+    role: "SERVEUR",
+    active: true,
+  },
+  {
+    name: "RH",
+    email: "rh@example.com",
+    password: "rhPassword123",
+    role: "RH",
+    active: true,
+  },
+
 ];
+
 
 const seedUser = async () => {
   try {
@@ -20,7 +50,7 @@ const seedUser = async () => {
         password: hashedPassword
       });
     }
-    console.info("✅ Admin user seeded!");
+    console.info("Admin user seeded!");
   } catch (err) {
     console.error("Failed to seed admin user:", err);
   }

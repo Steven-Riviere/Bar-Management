@@ -2,35 +2,68 @@ import { DataTypes } from "sequelize";
 import sequelize from "../config/database.js";
 
 const StockMovement = sequelize.define('StockMovement', {
-    type: {
-        type: DataTypes.ENUM("IN", "OUT", "TRANSFERT"),
-        allowNull: false,
-    },
-    quantity: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        validate: {
-        min: 1,
-        },
-    },
+  type: {
+    type: DataTypes.ENUM("IN", "OUT", "TRANSFER"),
+    allowNull: false,
+  },
 
-    biere_id: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-    },
+  quantity: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    validate: { min: 1 }
+  },
 
-    from_bar_id: {
-        type: DataTypes.INTEGER,
-        allowNull: true,
-    },
+  biereId: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
 
-    to_bar_id: {
-        type: DataTypes.INTEGER,
-        allowNull: true,
-    },
+  fromBarId: {
+    type: DataTypes.INTEGER,
+    allowNull: true,
+  },
+
+  toBarId: {
+    type: DataTypes.INTEGER,
+    allowNull: true,
+  },
+
+
+  userId: {
+    type: DataTypes.INTEGER,
+    allowNull: true,
+  },
+
+  reason: {
+    type: DataTypes.ENUM(
+      "SALE",        // commande
+      "RESTOCK",     // réappro
+      "TRANSFER",
+      "LOSS",        // casse / perte
+      "ADJUSTMENT"   // correction manuelle
+    ),
+    allowNull: false,
+    defaultValue: "ADJUSTMENT"
+  },
+
+  sourceType: {
+    type: DataTypes.STRING,
+    allowNull: true
+  },
+
+  sourceId: {
+    type: DataTypes.INTEGER,
+    allowNull: true
+  }
 
 }, {
   timestamps: true,
+  indexes: [
+    { fields: ["biereId"] },
+    { fields: ["fromBarId"] },
+    { fields: ["toBarId"] },
+    { fields: ["createdAt"] }
+  ]
 });
 
 export default StockMovement;

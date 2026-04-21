@@ -14,7 +14,7 @@ export async function getTableById(id) {
 }
 
 export async function createTable(data) {
-    const bar = await Bar.findByPk(data.bar_id);
+    const bar = await Bar.findByPk(data.barId);
     if (!bar) throw new Error("Bar non trouvé");
 
     return Table.create(data);
@@ -45,6 +45,6 @@ export async function enableTable(id) {
     return table;
 }
 
-export async function getTablesByBar(bar_id) {
-    return Table.findAll({ where: { bar_id } });
+export async function getTablesByBar(barId) {
+    return Table.findAll({ where: { barId } });
 }

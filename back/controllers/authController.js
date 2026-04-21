@@ -18,6 +18,7 @@ export async function login(req, res) {
       httpOnly: true,
       secure: false, // true en prod
       sameSite: "lax",
+      path: "/",
       maxAge: 60 * 60 * 1000 // 1h
     });
 

@@ -29,14 +29,15 @@ const User = sequelize.define('User',{
       ),
       defaultValue: "SERVEUR",
     },
-    bar_id: {
+    barId: {
         type: DataTypes.INTEGER,
         allowNull: true
     },
     active: {
         type: DataTypes.BOOLEAN,
         defaultValue: true
-    }
+    },
+    last_login: DataTypes.DATE
 
 },
 {timestamps: false});

@@ -2,21 +2,26 @@ import { useState } from "react";
 import { ROUTE_SIGNUP } from "../../constante";
 import { login as apiLogin } from "../../api/apiAuth";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function LoginPage({ onLogin }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
     setLoading(true);
 
+
     try {
       const data = await apiLogin({ email, password });
       onLogin(data.user);
+
+      navigate("/dashboard");
     } catch (err) {
       setError(err.message || "Erreur de connexion");
     } finally {

@@ -2,7 +2,7 @@ import * as service from "../services/barBiereService.js";
 
 export async function list(req, res) {
     try {
-        const beers = await service.getBeersForBar(req.params.bar_id);
+        const beers = await service.getBeersForBar(req.params.barId);
         if (!beers) return res.status(404).json({ error: "Bar non trouvé" });
         res.json(beers);
     } catch (err) {
@@ -13,8 +13,8 @@ export async function list(req, res) {
 export async function add(req, res) {
     try {
         const result = await service.addBeerToBar(
-            req.params.bar_id,
-            req.params.biere_id,
+            req.params.barId,
+            req.params.biereId,
             req.body
         );
 
@@ -29,8 +29,8 @@ export async function add(req, res) {
 export async function update(req, res) {
     try {
         const result = await service.updateBeerInBar(
-            req.params.bar_id,
-            req.params.biere_id,
+            req.params.barId,
+            req.params.biereId,
             req.body
         );
 
@@ -43,9 +43,9 @@ export async function update(req, res) {
 }
 
 export async function deactivateBeerFromBar(req, res) {
-  const { bar_id, biere_id } = req.params;
+  const { barId, biereId } = req.params;
   try {
-    const removed = await service.disableBiereFromBar(bar_id, biere_id, req.user.id);
+    const removed = await service.disableBiereFromBar(barId, biereId, req.user.id);
     if (!removed)
       return res.status(404).json({ error: "Lien bar/bière introuvable" });
 

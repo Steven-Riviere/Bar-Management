@@ -2,17 +2,21 @@ import { DataTypes } from "sequelize";
 import sequelize from "../config/database.js";
 
 const CommandePaiement = sequelize.define("CommandePaiement", {
-    commande_id: {
+    commandeId: {
         type: DataTypes.INTEGER,
         allowNull: false
     },
-    paiement_id: {
+    paiementId: {
         type: DataTypes.INTEGER,
         allowNull: false
     },
     amount: {
         type: DataTypes.FLOAT,
         allowNull: false
+    },
+    paid_at: {
+        type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW
     }
 });
 

@@ -5,13 +5,19 @@ import seedPaiement from "./seedPaiement.js";
 import seedUser from "./seedUser.js";
 import seedPermission from "./seedPermission.js";
 import seedUserPermissions from "./seedUserPermissions.js";
+import seedTable from "./seedTable.js";
+import seedCommande from "./seedCommande.js";
 
 export async function seedDatabase() {
-  await seedBar();
-  await seedBiere();
-  await seedBarBiere();
-  await seedPaiement();
   await seedUser();
   await seedPermission();
   await seedUserPermissions();
+
+  await seedBar();
+  await seedBiere();
+  await seedBarBiere();
+  await seedTable();
+
+  await seedCommande(); 
+  await seedPaiement();
 }

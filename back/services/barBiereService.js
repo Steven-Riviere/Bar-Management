@@ -2,8 +2,8 @@ import Bar from "../models/bar.js";
 import Biere from "../models/biere.js";
 import BarBiere from "../models/barBiere.js";
 
-export async function getBeersForBar(bar_id) {
-    const bar = await Bar.findByPk(bar_id, {
+export async function getBeersForBar(barId) {
+    const bar = await Bar.findByPk(barId, {
         include: {
             model: Biere,
             through: { attributes: ["price", "stock"] }
@@ -13,25 +13,25 @@ export async function getBeersForBar(bar_id) {
     return bar ? bar.Bieres : null;
 }
 
-export async function addBeerToBar(bar_id, biere_id, data) {
-    const bar = await Bar.findByPk(bar_id);
-    const beer = await Biere.findByPk(biere_id);
+export async function addBeerToBar(barId, biereId, data) {
+    const bar = await Bar.findByPk(barId);
+    const beer = await Biere.findByPk(biereId);
 
     if (!bar || !beer) return null;
 
     await BarBiere.create({
-        bar_id,
-        biere_id,
+        barId,
+        biereId,
         price: data.price,
         stock: 0,
         active: true,
     });
 
-    return getBeersForBar(bar_id);
+    return getBeersForBar(barId);
 }
 
-export async function updateBeerInBar(bar_id, biere_id, data) {
-    const pivot = await BarBiere.findOne({ where: { bar_id, biere_id } });
+export async function updateBeerInBar(barId, biereId, data) {
+    const pivot = await BarBiere.findOne({ where: { barId, biereId } });
     if (!pivot) return null;
 
     if(data.stock !== undefined) {
@@ -41,8 +41,8 @@ export async function updateBeerInBar(bar_id, biere_id, data) {
     return pivot;
 }
 
-export async function deactivateBeerFromBar(bar_id, biere_id, userId) {
-    const pivot = await BarBiere.findOne({where: { bar_id, biere_id }});
+export async function deactivateBeerFromBar(barId, biereId, userId) {
+    const pivot = await BarBiere.findOne({where: { barId, biereId }});
     if (!pivot) return null;
 
     pivot.active = false;
@@ -53,8 +53,8 @@ export async function deactivateBeerFromBar(bar_id, biere_id, userId) {
     return pivot;
 }
 
-export async function enableBeerForBar(bar_id, biere_id, userId) {
-    const pivot = await BarBiere.findOne({where: { bar_id, biere_id }});
+export async function enableBeerForBar(barId, biereId, userId) {
+    const pivot = await BarBiere.findOne({where: { barId, biereId }});
     if (!pivot) return null;
 
     pivot.active = true;

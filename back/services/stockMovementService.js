@@ -1,59 +1,113 @@
+import sequelize from "../config/database.js";
 import StockMovement from "../models/stockMovement.js";
 import BarBiere from "../models/barBiere.js";
 
 export async function applyMovement(data) {
-    const { type, quantity, biere_id, from_bar_id, to_bar_id } = data;
+    const t = await sequelize.transaction();
 
-    //CHECK STOCK AVANT OUT / TRANSFER SORTANT
-    if (type === "OUT" || type === "TRANSFER") {
-        if (from_bar_id) {
-            const stock = await BarBiere.findOne({
-                where: { bar_id: from_bar_id, biere_id }
-            });
+    try {
+        const { type, quantity, biereId, fromBarId, toBarId, userId, reason, sourceType, sourceId } = data;
 
-            if (!stock) {
-                throw new Error("Stock introuvable");
-            }
+        // =========================
+        // CHECK STOCK
+        // =========================
+        if (type === "OUT" || type === "TRANSFER") {
+            if (fromBarId) {
+                const stock = await BarBiere.findOne({
+                    where: { barId: fromBarId, biereId },
+                    transaction: t
+                });
 
-            if (stock.stock < quantity) {
-                throw new Error("Stock insuffisant");
+                if (!stock) {
+                    throw new Error("Stock introuvable");
+                }
+
+                if (stock.stock < quantity) {
+                    throw new Error("Stock insuffisant");
+                }
             }
         }
-    }
 
-    //MOUVEMENTS DES STOCKS
-    const movement = await StockMovement.create(data);
+        // =========================
+        // CREATE MOVEMENT
+        // =========================
+        const movement = await StockMovement.create(data, { transaction: t });
 
-    if(type ==="OUT" && from_bar_id) {
-        await BarBiere.decrement("stock", {
-            by: quantity,
-            where: {bar_id: from_bar_id, biere_id}
-        });
-    }
+        // =========================
+        // APPLY STOCK CHANGES
+        // =========================
 
-    //réception des stocks
-    if (type === "IN" && to_bar_id) {
-        await BarBiere.increment("stock", {
-        by: quantity,
-        where: { bar_id: to_bar_id, biere_id }
-        });
-    }
-
-    //transfert d'un bar <-> entrepôt
-    if (type === "TRANSFER") {
-        if (from_bar_id) {
+        // OUT
+        if (type === "OUT" && fromBarId) {
             await BarBiere.decrement("stock", {
                 by: quantity,
-                where: { bar_id: from_bar_id, biere_id }
+                where: { barId: fromBarId, biereId },
+                transaction: t
             });
         }
 
-        if (to_bar_id) {
-            await BarBiere.increment("stock", {
-                by: quantity,
-                where: { bar_id: to_bar_id, biere_id }
+        // IN
+        if (type === "IN" && toBarId) {
+            const existing = await BarBiere.findOne({
+                where: { barId: toBarId, biereId },
+                transaction: t
             });
+
+            if (!existing) {
+                await BarBiere.create({
+                    barId: toBarId,
+                    biereId,
+                    stock: quantity,
+                    price: 0
+                }, { transaction: t });
+            } else {
+                await BarBiere.increment("stock", {
+                    by: quantity,
+                    where: { barId: toBarId, biereId },
+                    transaction: t
+                });
+            }
         }
+
+        // TRANSFER
+        if (type === "TRANSFER") {
+
+            if (fromBarId) {
+                await BarBiere.decrement("stock", {
+                    by: quantity,
+                    where: { barId: fromBarId, biereId },
+                    transaction: t
+                });
+            }
+
+            if (toBarId) {
+                const existing = await BarBiere.findOne({
+                    where: { barId: toBarId, biereId },
+                    transaction: t
+                });
+
+                if (!existing) {
+                    await BarBiere.create({
+                        barId: toBarId,
+                        biereId,
+                        stock: quantity,
+                        price: 0
+                    }, { transaction: t });
+                } else {
+                    await BarBiere.increment("stock", {
+                        by: quantity,
+                        where: { barId: toBarId, biereId },
+                        transaction: t
+                    });
+                }
+            }
+        }
+
+        await t.commit();
+        return movement;
+
+    } catch (error) {
+        await t.rollback();
+        throw error;
     }
-    return movement;
 }

@@ -1,33 +1,40 @@
 import Bar from '../../models/bar.js';
 import Biere from '../../models/biere.js';
+import BarBiere from '../../models/barBiere.js';
 
 const seedBarBiere = async () => {
   try {
-    //bars
-    const baroque = await Bar.findOne({where: {name: "Baroque"}});
-    const lasKetchup = await Bar.findOne({where: {name: "Las Ketchup"}});
+    await BarBiere.destroy({ where: {} });
 
-    //bieres
-    const heineken = await Biere.findOne({where: {name: "Heineken"}});
-    const orangeMeca = await Biere.findOne({where: {name: "Orange Mécanique"}});
+    const bars = await Bar.findAll();
+    const bieres = await Biere.findAll();
 
-    //liaison
-    await baroque.addBiere(heineken, {
-      through: {
-        price: 5.00,
-        stock: 100
+    if (!bars.length || !bieres.length) {
+      throw new Error("Bars ou bières manquants");
+    }
+
+    const data = [];
+
+    for (const bar of bars) {
+      for (const biere of bieres) {
+        data.push({
+          barId: bar.id,
+          biereId: biere.id,
+          price: Math.floor(Math.random() * 4) + 4,
+          stock: bar.type === "WAREHOUSE"
+            ? 500
+            : Math.floor(Math.random() * 100),
+          active: true,
+          last_restock_at: new Date()
+        });
       }
-    });
-    await lasKetchup.addBiere(orangeMeca, {
-      through: {
-        price: 6.50,
-        stock: 50
-      }
-    });
+    }
 
-    console.info('✅ Database seeded!');
-  } catch (error) {
-    console.error('Failed to seed database:', error);
+    await BarBiere.bulkCreate(data, { validate: true });
+
+    console.log("BarBiere seeded");
+  } catch (err) {
+    console.error("BarBiere seed error:", err);
   }
 };
 

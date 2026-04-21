@@ -2,8 +2,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-d
 import NavBar from "./components/domain/NavBar.jsx";
 import LoginPage from "./pages/auth/LoginPage.jsx";
 import ProtectedRoute from "./components/domain/ProtectedRoute.jsx";
-import useAuth from "./hooks/useAuth.js";
-import { ROUTE_BARS, ROUTE_BEERS, ROUTE_ORDERS, ROUTE_PAYMENTS, ROUTE_TABLES, ROUTE_USERS, ROUTE_LOGIN, ROUTE_SIGNUP, ROUTE_BAR_EDIT, ROUTE_BAR_CREATE, ROUTE_BEER_EDIT } from "./constante";
+import { ROUTE_BARS, ROUTE_BEERS, ROUTE_ORDERS, ROUTE_PAYMENTS, ROUTE_TABLES, ROUTE_USERS, ROUTE_LOGIN, ROUTE_SIGNUP, ROUTE_BAR_EDIT, ROUTE_BAR_CREATE, ROUTE_BEER_EDIT, ROUTE_DASHBOARD } from "./constante";
 import AuthWatcher from "./AuthWatcher.jsx";
 import RegisterPage from "./pages/auth/RegisterPage.jsx";
 import BarsList from "./pages/bars/BarsList.jsx";
@@ -11,9 +10,13 @@ import BarEdit from "./pages/bars/BarEdit.jsx";
 import BarCreate from "./pages/bars/BarCreate.jsx";
 import BeersList from "./pages/beers/BeersList.jsx";
 import BeerEdit from "./pages/beers/BeerEdit.jsx";
+import DashboardPage from "./pages/dashboard/DashboardPage.jsx";
+import {useAuthContext } from "./context/useAuthContext";
+import {AuthProvider} from "./context/authContext";
+
 
 function App() {
-  const { user, setUser, loading, checkAuth } = useAuth();
+  const { user, setUser, loading, checkAuth } = useAuthContext();
 
   if (loading) return <div>Chargement...</div>;
 
@@ -27,7 +30,7 @@ function App() {
         <Routes>
           <Route
             path={ROUTE_LOGIN}
-            element={!user ? <LoginPage onLogin={setUser} /> : <Navigate to={ROUTE_BARS} />}
+            element={!user ? <LoginPage onLogin={setUser} /> : <Navigate to={ROUTE_DASHBOARD} />}
           />
 
         <Route
@@ -39,7 +42,14 @@ function App() {
           }
         />
 
-
+        <Route
+          path={ROUTE_DASHBOARD}
+          element={
+            <ProtectedRoute checkAuth={checkAuth}>
+              <DashboardPage />
+            </ProtectedRoute>
+          }
+        />
           <Route
             path={ROUTE_BARS}
             element={
@@ -126,11 +136,12 @@ function App() {
   );
 }
 
-
 export default function AppWrapper() {
   return (
     <Router>
-      <App />
+      <AuthProvider>
+        <App />
+      </AuthProvider>
     </Router>
   );
 }

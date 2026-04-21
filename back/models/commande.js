@@ -3,10 +3,15 @@ import sequelize from "../config/database.js";
 
 const Commande = sequelize.define('Commande',{
     price: DataTypes.FLOAT,
-    table_id : DataTypes.INTEGER,
+    tableId : DataTypes.INTEGER,
+    userId: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+    },
     date: {
-        type: DataTypes.DATEONLY, // Utilisation de DATEONLY pour stocker uniquement la date sans l'heure
+        type: DataTypes.DATE,
         allowNull: false,
+        defaultValue: DataTypes.NOW
     },
     status: {
         type: DataTypes.ENUM,

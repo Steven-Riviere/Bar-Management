@@ -1,23 +1,11 @@
-import { Navigate, useLocation } from "react-router-dom";
-import { useEffect, useState } from "react";
-import apiFetch from "../../api/apiClient.js";
+import { Navigate } from "react-router-dom";
+import { useAuthContext } from "../../context/useAuthContext";
 
-export default function ProtectedRoute({ children, checkAuth }) {
-  const [isAuth, setIsAuth] = useState(null);
-  const location = useLocation();
+export default function ProtectedRoute({ children }) {
+  const { user, loading } = useAuthContext();
 
-  useEffect(() => {
-    let mounted = true;
-
-    checkAuth()
-      .then((ok) => mounted && setIsAuth(ok))
-      .catch(() => mounted && setIsAuth(false));
-
-    return () => (mounted = false);
-  }, [location.pathname]);
-
-  if (isAuth === null) return <div>Chargement...</div>;
-  if (!isAuth) return <Navigate to="/login" />;
+  if (loading) return <div>Chargement...</div>;
+  if (!user) return <Navigate to="/login" />;
 
   return children;
 }

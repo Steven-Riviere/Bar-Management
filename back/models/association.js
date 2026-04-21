@@ -13,35 +13,39 @@ import StockMovement from "./stockMovement.js";
 
 // --- Associations --- //
 // Bar <-> Biere
-Bar.belongsToMany(Biere, { through: BarBiere });
-Biere.belongsToMany(Bar, { through: BarBiere });
+Bar.belongsToMany(Biere, { through: BarBiere, foreignKey: "barId", otherKey: "biereId" });
+Biere.belongsToMany(Bar, { through: BarBiere, foreignKey: "biereId", otherKey: "barId" });
 
 // Commande <-> Biere
-Commande.belongsToMany(Biere, { through: BiereCommande });
-Biere.belongsToMany(Commande, { through: BiereCommande });
+Commande.belongsToMany(Biere, { through: BiereCommande, foreignKey: "commandeId", otherKey: "biereId" });
+Biere.belongsToMany(Commande, { through: BiereCommande, foreignKey: "biereId", otherKey: "commandeId" });
+User.hasMany(Commande, { foreignKey: "userId" });
+Commande.belongsTo(User, { foreignKey: "userId" });
 
 // Commande <-> Paiement
-Commande.belongsToMany(Paiement, { through: CommandePaiement });
-Paiement.belongsToMany(Commande, { through: CommandePaiement });
+Commande.belongsToMany(Paiement, { through: CommandePaiement, foreignKey: "commandeId", otherKey: "paiementId" });
+Paiement.belongsToMany(Commande, { through: CommandePaiement, foreignKey: "paiementId", otherKey: "commandeId" });
 
 // Table <-> Commande
-Table.hasMany(Commande, { foreignKey: "table_id" });
-Commande.belongsTo(Table, { foreignKey: "table_id" });
+Table.hasMany(Commande, { foreignKey: "tableId" });
+Commande.belongsTo(Table, { foreignKey: "tableId" });
 
 // Table <-> Bar
-Bar.hasMany(Table, { foreignKey: "bar_id" });
-Table.belongsTo(Bar, { foreignKey: "bar_id" });
+Bar.hasMany(Table, { foreignKey: "barId" });
+Table.belongsTo(Bar, { foreignKey: "barId" });
 
 //User <-> Permission
-User.belongsToMany(Permission, { through: UserPermission, foreignKey: "user_id" });
-Permission.belongsToMany(User, { through: UserPermission, foreignKey: "permission_id" });
+User.belongsToMany(Permission, { through: UserPermission, foreignKey: "userId", otherKey: "permissionId" });
+Permission.belongsToMany(User, { through: UserPermission, foreignKey: "permissionId", otherKey: "userId" });
 
 //Mouvement des stocks de biere
-Biere.hasMany(StockMovement, { foreignKey: "biere_id" });
-StockMovement.belongsTo(Biere, { foreignKey: "biere_id" });
+Biere.hasMany(StockMovement, { foreignKey: "biereId" });
+StockMovement.belongsTo(Biere, { foreignKey: "biereId" });
 
-Bar.hasMany(StockMovement, { foreignKey: "from_bar_id", as: "fromMovements" });
-Bar.hasMany(StockMovement, { foreignKey: "to_bar_id", as: "toMovements" });
+Bar.hasMany(StockMovement, { foreignKey: "fromBarId", as: "fromMovements" });
+Bar.hasMany(StockMovement, { foreignKey: "toBarId", as: "toMovements" });
+StockMovement.belongsTo(Bar, { foreignKey: "fromBarId", as: "fromBar" });
+StockMovement.belongsTo(Bar, { foreignKey: "toBarId", as: "toBar" });
 
 export {
     Biere,

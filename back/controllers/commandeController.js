@@ -12,7 +12,7 @@ export async function getAll(req, res) {
 export async function getOne(req, res) {
     try {
         const order = await service.getOrder(req.params.id);
-        if (!order) return res.status(404).json({ error: "ordernon trouvée" });
+        if (!order) return res.status(404).json({ error: "order non trouvée" });
         res.json(order);
     } catch (err) {
         res.status(500).json({ error: err.message });

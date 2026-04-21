@@ -65,8 +65,10 @@ const seedUserPermissions = async () => {
           perms = [];
       }
 
+    if (perms.length > 0) {
       await user.addPermissions(perms);
     }
+  }
 
     console.log("UserPermissions seeded successfully.");
   } catch (error) {

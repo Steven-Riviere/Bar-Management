@@ -2,11 +2,11 @@ import {DataTypes} from "sequelize";
 import sequelize from "../config/database.js";
 
 const UserPermission = sequelize.define("UserPermission", {
-    user_id: {
+    userId: {
         type: DataTypes.INTEGER,
         allowNull: false,
     },
-    permission_id: {
+    permissionId: {
         type: DataTypes.INTEGER,
         allowNull: false,
     }

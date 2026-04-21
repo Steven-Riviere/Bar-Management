@@ -5,6 +5,7 @@ export async function authenticate(req, res, next) {
   const token = req.cookies.token;
 
   if (!token) {
+    console.log("Pas de token");
     return res.status(401).json({ error: "Token manquant" });
   }
 

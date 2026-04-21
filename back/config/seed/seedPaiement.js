@@ -9,9 +9,9 @@ const seedPaiement = async () => {
         where: { method }
       });
     }
-    console.info("✅ Database seeded");
+    console.info("Database seeded");
   } catch (error) {
-    console.error("❌ Failed to seed database :", error);
+    console.error("Failed to seed database :", error);
   }
 };
 

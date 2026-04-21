@@ -8,18 +8,18 @@ export default function useAuth() {
   const checkAuth = async () => {
     try {
       const data = await apiFetch("/auth/me");
-      setUser(data);
-      return true;
-    } 
-    catch (err) {
-      if (err.status === 401) {
+      if (!data) {
         setUser(null);
         return false;
       }
 
-      // pour les autres erreurs et a évoluer si besoin
-      console.error(err);
-      throw err;
+      setUser(data);
+      return true;
+
+    } catch (err) {
+      console.error("Auth error:", err);
+      setUser(null);
+      return false;
     }
   };
 
