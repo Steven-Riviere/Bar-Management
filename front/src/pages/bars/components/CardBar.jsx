@@ -1,7 +1,7 @@
 import * as React from "react"
-import { Badge } from "../ui/badge"
-import { Button } from "../ui/button"
-import { Card, CardHeader, CardContent, CardFooter } from "../ui/card"
+import { Badge } from "../../../components/ui/badge"
+import { Button } from "../../../components/ui/button"
+import { Card, CardHeader, CardContent, CardFooter } from "../../../components/ui/card"
 import { Link } from "react-router-dom"
 
 export const CardBar = ({bar, onDisable, onEnable, onView, children}) => {

@@ -10,7 +10,7 @@ export const getTopBeers = (limit = 5) =>
   apiFetch(`/analytics/beers/top`);
 
 export const getSalesByPeriod = (start, end) =>
-  apiFetch(`/analytics/sales/period`);
+  apiFetch(`/analytics/sales/period?start=${start}&end=${end}`);
 
 export const getStockUsage = () =>
   apiFetch("/analytics/stock/usage");

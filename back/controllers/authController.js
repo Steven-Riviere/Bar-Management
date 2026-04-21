@@ -1,4 +1,5 @@
 import * as service from "../services/authService.js";
+import User from "../models/user.js";
 
 function validatePassword(password) {
   const regex = /^(?=.*[A-Z])(?=.*\d).{8,}$/;
@@ -54,5 +55,22 @@ export async function signup(req, res) {
     });
   } catch (err) {
     res.status(400).json({ error: err.message });
+  }
+}
+
+export async function me(req, res) {
+  try {
+    const user = await User.findByPk(req.user.id, {
+      attributes: ["id", "name", "email", "role"]
+    });
+
+    if (!user) {
+      return res.status(404).json({ error: "Utilisateur non trouvé" });
+    }
+
+    res.json(user);
+
+  } catch (err) {
+    res.status(500).json({ error: err.message });
   }
 }

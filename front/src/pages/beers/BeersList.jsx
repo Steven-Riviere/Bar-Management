@@ -3,7 +3,7 @@ import { fetchBeers, patchBeer } from "../../api/apiBiere"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faPlus } from "@fortawesome/free-solid-svg-icons"
 import { Link } from "react-router-dom"
-import { CardBeer } from "../../components/domain/CardBeer"
+import { CardBeer } from "./components/CardBeer"
 import { Button } from "../../components/ui/button"
 
 const BeersList = () => {

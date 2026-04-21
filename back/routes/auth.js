@@ -6,6 +6,7 @@ const router = express.Router();
 
 router.post("/login", controller.login);
 router.post("/signup", controller.signup);
+router.get("/me", authenticate, controller.me);
 
 router.post("/logout", (req, res) => {
   res.clearCookie("token", {
@@ -14,11 +15,6 @@ router.post("/logout", (req, res) => {
     sameSite: "lax",
   });
   res.json({ message: "Déconnexion réussie" });
-});
-
-
-router.get("/me", authenticate, (req, res) => {
-  res.json(req.user);
 });
 
 export default router;

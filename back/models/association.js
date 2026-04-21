@@ -15,12 +15,25 @@ import StockMovement from "./stockMovement.js";
 // Bar <-> Biere
 Bar.belongsToMany(Biere, { through: BarBiere, foreignKey: "barId", otherKey: "biereId" });
 Biere.belongsToMany(Bar, { through: BarBiere, foreignKey: "biereId", otherKey: "barId" });
+BarBiere.belongsTo(Bar, { foreignKey: "barId" });
+BarBiere.belongsTo(Biere, { foreignKey: "biereId" });
+Bar.hasMany(BarBiere, { foreignKey: "barId" });
+Biere.hasMany(BarBiere, { foreignKey: "biereId" });
+
 
 // Commande <-> Biere
 Commande.belongsToMany(Biere, { through: BiereCommande, foreignKey: "commandeId", otherKey: "biereId" });
 Biere.belongsToMany(Commande, { through: BiereCommande, foreignKey: "biereId", otherKey: "commandeId" });
+Biere.hasMany(BiereCommande, { foreignKey: "biereId" });
+BiereCommande.belongsTo(Biere, { foreignKey: "biereId" });
+Commande.hasMany(BiereCommande, { foreignKey: "commandeId" });
+BiereCommande.belongsTo(Commande, { foreignKey: "commandeId" });
 User.hasMany(Commande, { foreignKey: "userId" });
 Commande.belongsTo(User, { foreignKey: "userId" });
+Commande.belongsTo(Bar, { foreignKey: "barId" });
+BiereCommande.belongsTo(Bar, { foreignKey: "barId" });
+BiereCommande.belongsTo(Biere, { foreignKey: "biereId" });
+
 
 // Commande <-> Paiement
 Commande.belongsToMany(Paiement, { through: CommandePaiement, foreignKey: "commandeId", otherKey: "paiementId" });
