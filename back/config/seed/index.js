@@ -9,11 +9,11 @@ import seedTable from "./seedTable.js";
 import seedCommande from "./seedCommande.js";
 
 export async function seedDatabase() {
+  await seedBar();
   await seedUser();
   await seedPermission();
   await seedUserPermissions();
 
-  await seedBar();
   await seedBiere();
   await seedBarBiere();
   await seedTable();

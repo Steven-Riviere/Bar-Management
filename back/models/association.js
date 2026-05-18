@@ -47,6 +47,10 @@ Commande.belongsTo(Table, { foreignKey: "tableId" });
 Bar.hasMany(Table, { foreignKey: "barId" });
 Table.belongsTo(Bar, { foreignKey: "barId" });
 
+// User <-> Bar
+User.belongsTo(Bar, { foreignKey: "barId", as: "bar" });
+Bar.hasMany(User, { foreignKey: "barId", as: "users" });
+
 //User <-> Permission
 User.belongsToMany(Permission, { through: UserPermission, foreignKey: "userId", otherKey: "permissionId" });
 Permission.belongsToMany(User, { through: UserPermission, foreignKey: "permissionId", otherKey: "userId" });

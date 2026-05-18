@@ -39,7 +39,7 @@ export default function AdminHub() {
         <Card
           title="Gestion RH"
           description="Utilisateurs, rôles, permissions"
-          onClick={() => navigate("/users")}
+          onClick={() => navigate("/rh")}
         />
       </section>
 

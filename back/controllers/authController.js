@@ -28,7 +28,16 @@ export async function login(req, res) {
       user: result.user
     });
   } catch (err) {
-    res.status(401).json({ error: err.message });
+    const status =
+      err.code === "ACCOUNT_DISABLED" ? 403 :
+      err.code === "USER_NOT_FOUND" ? 404 :
+      err.code === "INVALID_PASSWORD" ? 401 :
+      400;
+
+    res.status(status).json({
+      code: err.code || "AUTH_ERROR",
+      message: err.message
+    });
   }
 }
 

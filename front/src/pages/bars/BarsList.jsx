@@ -3,8 +3,6 @@ import { fetchBars, patchBar } from "../../api/apiBar"
 import { Link } from "react-router-dom"
 import { CardBar } from "./components/CardBar"
 import { Button } from "../../components/ui/button"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faPlus } from "@fortawesome/free-solid-svg-icons"
 
 const BarsList = () => {
   const [bars, setBars] = useState([])

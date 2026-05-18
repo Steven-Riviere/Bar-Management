@@ -77,7 +77,7 @@ const barsData = [
 
 const seedBar = async () => {
   try {
-    await Bar.destroy({ where: {} });
+    await Bar.destroy({ where: {}, force: true });
     await Bar.bulkCreate(barsData);
 
     console.info("✅ Bars seeded");

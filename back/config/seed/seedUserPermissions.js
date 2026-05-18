@@ -27,8 +27,9 @@ const seedUserPermissions = async () => {
             "VIEW_BEER", "CREATE_BEER", "UPDATE_BEER",
             "VIEW_BAR", "CREATE_BAR", "UPDATE_BAR", "DELETE_BAR",
             "VIEW_STOCK", "MANAGE_STOCK",
-            "VIEW_ANALYTICS"
-            
+            "VIEW_ANALYTICS",
+            "CREATE_USER", "UPDATE_USER", "VIEW_USER",
+            "ASSIGN_PERMISSIONS"
           ]);
           break;
 

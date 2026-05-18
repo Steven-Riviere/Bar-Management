@@ -1,22 +1,23 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import User from "../models/user.js";
+import { AuthError } from "../errors/authErrors.js";
 
 
 export async function login(email, password) {
     const user = await User.findOne({ where: { email } });
 
     if (!user) {
-        throw new Error("Utilisateur introuvable");
+        throw new AuthError("Utilisateur introuvable", "USER_NOT_FOUND");
     }
 
     if (!user.active) {
-        throw new Error("Compte désactivé");
+        throw new AuthError("Compte désactivé", "ACCOUNT_DISABLED");
     }
 
     const isValid = await bcrypt.compare(password, user.password);
     if (!isValid) {
-        throw new Error("Mot de passe incorrect");
+        throw new AuthError("Mot de passe incorrect", "INVALID_PASSWORD");
     }
 
     const token = jwt.sign(
@@ -44,7 +45,7 @@ export async function signup(data) {
 
     const exists = await User.findOne({ where: { email } });
     if (exists) {
-        throw new Error("Email déjà utilisé");
+        throw new AuthError("Email déjà utilisé", "EMAIL_ALREADY_USED");
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);

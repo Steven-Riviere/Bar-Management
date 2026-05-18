@@ -2,7 +2,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-d
 import NavBar from "./components/layout/NavBar.jsx";
 import LoginPage from "./pages/auth/LoginPage.jsx";
 import ProtectedRoute from "./components/auth/ProtectedRoute.jsx";
-import { ROUTE_BARS, ROUTE_BEERS, ROUTE_ORDERS, ROUTE_PAYMENTS, ROUTE_TABLES, ROUTE_USERS, ROUTE_LOGIN, ROUTE_SIGNUP, ROUTE_BAR_EDIT, ROUTE_BAR_CREATE, ROUTE_BEER_EDIT, ROUTE_DASHBOARD, ROUTE_ANALYTICS } from "./constante";
+import { ROUTE_BARS, ROUTE_BEERS, ROUTE_ORDERS, ROUTE_PAYMENTS, ROUTE_TABLES, ROUTE_LOGIN, ROUTE_SIGNUP, ROUTE_BAR_EDIT, ROUTE_BAR_CREATE, ROUTE_BEER_EDIT, ROUTE_DASHBOARD, ROUTE_ANALYTICS, ROUTE_RH } from "./constante";
 import AuthWatcher from "./AuthWatcher.jsx";
 import RegisterPage from "./pages/auth/RegisterPage.jsx";
 import BarsList from "./pages/bars/BarsList.jsx";
@@ -14,7 +14,7 @@ import DashboardPage from "./pages/DashboardPage.jsx";
 import {useAuthContext } from "./context/useAuthContext";
 import {AuthProvider} from "./context/authContext";
 import AnalyticsPage from "./pages/analytics/AnalyticsPage.jsx";
-
+import HumanRessourcePage from "./pages/rh/HumanRessourcePage.jsx";
 
 function App() {
   const { user, setUser, loading, checkAuth } = useAuthContext();
@@ -52,11 +52,20 @@ function App() {
           }
         />
 
-        <Route
+          <Route
             path={ROUTE_ANALYTICS}
             element={
               <ProtectedRoute checkAuth={checkAuth}>
                 <AnalyticsPage />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path={ROUTE_RH}
+            element={
+              <ProtectedRoute checkAuth={checkAuth}>
+                <HumanRessourcePage />
               </ProtectedRoute>
             }
           />
@@ -131,14 +140,7 @@ function App() {
             }
           />
 
-          <Route
-            path={ROUTE_USERS}
-            element={
-              <ProtectedRoute checkAuth={checkAuth}>
-                <div>Page Users</div>
-              </ProtectedRoute>
-            }
-          />
+
 
           <Route path="*" element={<Navigate to={ROUTE_LOGIN} />} />
         </Routes>

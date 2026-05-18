@@ -1,6 +1,7 @@
 import { useAuthContext } from "../context/useAuthContext";
 import AdminHub from "./admin/AdminHub";
 import AnalyticsPage from "./analytics/AnalyticsPage";
+import HumanRessourcePage from "./rh/HumanRessourcePage";
 
 
 export default function DashboardPage() {
@@ -13,6 +14,9 @@ export default function DashboardPage() {
   }
   if (user.role === "GERANT") {
       return <AnalyticsPage />;
+  }
+  if (user.role === "RH") {
+    return <HumanRessourcePage />;
   }
   if (user.role === "SERVEUR") {
     return <OrdersPage />;

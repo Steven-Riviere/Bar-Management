@@ -11,22 +11,19 @@ async function apiFetch(endpoint, options = {}) {
         ...options,
       });
 
-    if (response.status === 401) {
-      return null;
-    }
+   if (response.status === 204) return null;
+
+    const data = await response.json().catch(() => null);
 
     if (!response.ok) {
-      const text = await response.text();
-      throw new Error(text || "Erreur API");
+      throw {
+        status: response.status,
+        ...(data || {}),
+      };
     }
 
-    if (response.status === 204) {
-      return null;
-    }
-
-    return await response.json();
-
-    } catch (err) {
+    return data;
+  } catch (err) {
     console.error("API ERROR:", err);
     throw err;
   }

@@ -7,7 +7,7 @@ export default function StockUsageChart({ data = [] }) {
                 {data.length ? (
                     data.map((item) => (
                         <div
-                            key={`${item.bar_id}-${item.biere_id}`}
+                            key={`${item.barId}-${item.biereId}`}
                             className="flex justify-between p-2 bg-gray-50 rounded"
                         >
                             <span>

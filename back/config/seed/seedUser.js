@@ -1,58 +1,100 @@
 import User from "../../models/user.js";
+import Bar from "../../models/bar.js";
 import bcrypt from "bcrypt";
 
-const adminData = [
-  {
-    name: "Admin",
-    email: "admin@example.com",
-    password: "adminPassword123",
-    role: "ADMIN",
-    active: true,
-  },
-  {
-    name: "Gérant",
-    email: "gerant@example.com",
-    password: "gerantPassword123",
-    role: "GERANT",
-    active: true,
-  },
-  {
-    name: "BARMAN",
-    email: "barman@example.com",
-    password: "barmanPassword123",
-    role: "BARMAN",
-    active: true,
-  },
-  {
-    name: "SERVEUR",
-    email: "serveur@example.com",
-    password: "serveurPassword123",
-    role: "SERVEUR",
-    active: true,
-  },
-  {
-    name: "RH",
-    email: "rh@example.com",
-    password: "rhPassword123",
-    role: "RH",
-    active: true,
-  },
-
+const firstNames = [
+  "Lucas", "Emma", "Hugo", "Lina", "Noah", "Chloé",
+  "Nathan", "Inès", "Louis", "Manon", "Adam", "Sarah",
+  "Tom", "Léa", "Yanis", "Julie"
 ];
 
+const lastNames = [
+  "Martin", "Bernard", "Dubois", "Thomas", "Robert",
+  "Richard", "Petit", "Durand", "Moreau", "Simon"
+];
+
+function randomFrom(arr) {
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+
+function generateName() {
+  return `${randomFrom(firstNames)} ${randomFrom(lastNames)}`;
+}
 
 const seedUser = async () => {
   try {
-    for (const user of adminData) {
-      const hashedPassword = await bcrypt.hash(user.password, 10);
+    await User.destroy({ where: {} });
+
+    const bars = await Bar.findAll();
+    if (!bars.length) throw new Error("Aucun bar trouvé");
+
+    const users = [];
+
+    users.push(
+      {
+        name: "Admin",
+        email: "admin@example.com",
+        password: "adminPassword123",
+        role: "ADMIN",
+        barId: null
+      },
+      {
+        name: "Gérant",
+        email: "gerant@example.com",
+        password: "gerantPassword123",
+        role: "GERANT",
+        barId: null
+      },
+      {
+        name: "RH",
+        email: "rh@example.com",
+        password: "rhPassword123",
+        role: "RH",
+        barId: null
+      },
+    );
+
+
+  // Equipes
+      bars.forEach((bar, index) => {
+
+      // 1 barman
+      users.push({
+        name: generateName(),
+        email: `barman${index}@example.com`,
+        password: "password123",
+        role: "BARMAN",
+        barId: bar.id
+      });
+
+      // 2 à 3 serveurs
+      const nbServeurs = 2 + Math.floor(Math.random() * 2);
+
+      for (let i = 0; i < nbServeurs; i++) {
+        users.push({
+          name: generateName(),
+          email: `serveur${index}_${i}@example.com`,
+          password: "password123",
+          role: "SERVEUR",
+          barId: bar.id
+        });
+      }
+    });
+
+    // hash + insert
+    for (const u of users) {
+      const hashed = await bcrypt.hash(u.password, 10);
+
       await User.create({
-        ...user,
-        password: hashedPassword
+        ...u,
+        password: hashed,
+        active: true
       });
     }
-    console.info("Admin user seeded!");
+
+    console.info("✅ Users seeded (équipes réalistes par bar)");
   } catch (err) {
-    console.error("Failed to seed admin user:", err);
+    console.error("Seed user failed:", err);
   }
 };
 

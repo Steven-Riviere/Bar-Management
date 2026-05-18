@@ -7,7 +7,7 @@ export default function TopBeersList({ data = [] }) {
                 {data.length ? (
                     data.map((beer, index) => (
                         <li
-                            key={beer.biereId || beer.biere_id}
+                            key={beer.biereId}
                             className="flex justify-between p-2 bg-gray-50 rounded"
                         >
                             <span>

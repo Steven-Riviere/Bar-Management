@@ -13,6 +13,7 @@ import paiementsRoutes from './routes/paiements.js';
 import tablesRoutes from './routes/tables.js';
 import cookieParser from "cookie-parser";
 import analyticsRoutes from './routes/analytics.js';
+import userRoutes from './routes/users.js';
 
 //env
 dotenv.config();
@@ -43,10 +44,11 @@ app.use('/commandes', commandesRoutes);
 app.use('/paiements', paiementsRoutes);
 app.use('/tables', tablesRoutes);
 app.use('/analytics', analyticsRoutes);
+app.use('/users', userRoutes);
 
 sequelize
-  .sync()
-  //.sync({force : true}) pour reset la bdd quand on rajoutera des seed a l'avenir
+  //.sync()
+  .sync({force : true}) //pour reset la bdd quand on rajoutera des seed a l'avenir//
   .then(async () => {
     console.log('✅ Database & tables created!');
     await seedDatabase();
