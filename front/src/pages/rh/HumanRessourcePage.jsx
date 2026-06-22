@@ -86,14 +86,14 @@ const HumanRessourcePage = () => {
 
                 <table className="min-w-full bg-white">
 
-                    <thead className="bg-gray-100">
+                    <thead className="bg-gray-100 text-center">
                         <tr>
-                            <th className="p-3 text-left">Nom</th>
-                            <th className="p-3 text-left">Email</th>
-                            <th className="p-3 text-left">Rôle</th>
-                            <th className="p-3 text-left">Bar</th>
-                            <th className="p-3 text-left">Actif</th>
-                            <th className="p-3 text-left">Actions</th>
+                            <th className="p-3">Nom</th>
+                            <th className="p-3">Email</th>
+                            <th className="p-3">Rôle</th>
+                            <th className="p-3">Bar</th>
+                            <th className="p-3">Actif</th>
+                            <th className="p-3">Actions</th>
                         </tr>
                     </thead>
                     <tbody>

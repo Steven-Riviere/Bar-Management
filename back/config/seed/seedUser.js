@@ -25,28 +25,33 @@ const seedUser = async () => {
   try {
     await User.destroy({ where: {} });
 
-    const bars = await Bar.findAll();
+    const bars = await Bar.findAll({
+      where: {
+        type: "BAR"
+      }
+    });
+    
     if (!bars.length) throw new Error("Aucun bar trouvé");
 
     const users = [];
 
     users.push(
       {
-        name: "Admin",
+        name: "Steven",
         email: "admin@example.com",
         password: "adminPassword123",
         role: "ADMIN",
         barId: null
       },
       {
-        name: "Gérant",
+        name: "Benjamin",
         email: "gerant@example.com",
         password: "gerantPassword123",
         role: "GERANT",
         barId: null
       },
       {
-        name: "RH",
+        name: "Sophie",
         email: "rh@example.com",
         password: "rhPassword123",
         role: "RH",
