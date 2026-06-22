@@ -4,8 +4,7 @@ export default function StockUsageChart({ data = [] }) {
             <h2 className="font-semibold mb-3">📦 Usage stock</h2>
 
             <div className="space-y-2">
-                {data.length ? (
-                    data.map((item) => (
+                {data.slice(0,10).map((item) => (
                         <div
                             key={`${item.barId}-${item.biereId}`}
                             className="flex justify-between p-2 bg-gray-50 rounded"
@@ -18,10 +17,7 @@ export default function StockUsageChart({ data = [] }) {
                                 Stock: {item.stock}
                             </span>
                         </div>
-                    ))
-                ) : (
-                    <p className="text-gray-500">Aucune donnée</p>
-                )}
+                    ))}
             </div>
         </div>
     );

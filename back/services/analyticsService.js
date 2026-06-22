@@ -137,8 +137,8 @@ export async function getStockUsage() {
   return stock.map(s => ({
     barId: s.barId,
     biereId: s.biereId,
-    name: s.Biere?.name ?? "Unknown",
-    name: s.Bar?.name ?? "Unknown",
+    beer_name: s.Biere?.name ?? "Unknown",
+    bar_name: s.Bar?.name ?? "Unknown",
     stock: s.stock ?? 0
   }));
 }
